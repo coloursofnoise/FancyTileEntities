@@ -1,0 +1,44 @@
+# Condition Block
+placements.entities.FancyTileEntities/FancyConditionBlock=LoadConditionBlock.tooltips.conditionID=Links the condition block to the ID of a key, strawberry, or button.\nFormat: (room:id)\nExample: "a-01:4"
+placements.entities.FancyTileEntities/FancyConditionBlock=LoadConditionBlock.tooltips.condition=Ties the activation to the collection or activation of a key, strawberry, or button.
+placements.entities.FancyTileEntities/FancyConditionBlock=LoadConditionBlock.tooltips.tileType=Determines the visual appearance of the condition block.
+
+# Coverup Wall
+
+
+# Crumble Wall On Rumble
+placements.entities.FancyTileEntities/FancyCrumbleWallOnRumble.tooltips.blendin=Blends the block in with the walls it touches, making it less apparent.
+placements.entities.FancyTileEntities/FancyCrumbleWallOnRumble.tooltips.tiletype=Determines the visual appearance of the wall.
+placements.entities.FancyTileEntities/FancyCrumbleWallOnRumble.tooltips.persistent=Once broken, the block will remain that way, even if the player dies.
+
+# Dash Block
+placements.entities.FancyTileEntities/FancyDashBlock.tooltips.blendin=Blends the block with the walls it touches, making it less apparent.
+placements.entities.FancyTileEntities/FancyDashBlock.tooltips.canDash=Whether the player can break the block by dashing into it.
+placements.entities.FancyTileEntities/FancyDashBlock.tooltips.permanent=Once broken, the block will remain that way, even if the player dies.
+
+# Exit Block
+placements.entities.FancyTileEntities/FancyExitBlock.tooltips.playTransitionReveal=Determines whether entering the wall should play the reveal jingle.
+
+# Fake Wall
+placements.entities.FancyTileEntities/FancyFakeWall.tooltips.playTransitionReveal=Determines whether entering the wall should play the reveal jingle.
+
+# Falling Block
+placements.entities.FancyTileEntities/FancyFallingBlock.tooltips.climbFall=After a delay, the block will physically fall down until it comes into contact with another block.
+placements.entities.FancyTileEntities/FancyFallingBlock.tooltips.behind=Whether the block should visually be further behind in the scene or not.
+placements.entities.FancyTileEntities/FancyFallingBlock.tooltips.tileDataHighlight=Edit the tilemap that shows as the block moves.
+
+# Badeline Boss Moving Block
+placements.entities.FancyTileEntities/FancyFinalBossMovingBlock.tooltips.nodeIndex=The node index of the Badeline boss this should fall down on.
+placements.entities.FancyTileEntities/FancyFinalBossMovingBlock.tooltips.tileDataHighlight=Edit the tilemap that shows as the block moves.
+
+# Floaty Space Block
+placements.entities.FancyTileEntities/FancyFloatySpaceBlock.tooltips.connectsTo=Blocks with the same connect index will connect to eachother.
+placements.entities.FancyTileEntities/FancyFloatySpaceBlock.tooltips.disableSpawnOffset=Whether or not the entity should spawn without the random offset.
+
+# Intro Crusher
+placements.entities.FancyTileEntities/FancyIntroCrusher.tooltips.flags=If any of the flags are set, the entity will rest at its end node instead.
+placements.entities.FancyTileEntities/FancyIntroCrusher.tooltips.manualTrigger=For use with an EntityTrigger.
+
+# Solid Tiles
+placements.entities.FancyTileEntities/FancySolidTiles.tooltips.blendEdges=Blends the block in with the walls it touches.
+placements.entities.FancyTileEntities/FancySolidTiles.tooltips.randomSeed=The seed used to select the random textures.

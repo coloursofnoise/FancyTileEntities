@@ -1,0 +1,2 @@
+coloursofnoise_demos_fancytileentitiesdemo=Fancy Tile Entities Demo
+poem_coloursofnoise_demos_fancytileentitiesdemo_A=Fancy Pants

@@ -1,0 +1,74 @@
+Mountain:
+    Idle:
+        Position: [ 5.961, 8.823, 5.058 ]
+        Target: [ 5.061, 7.757, 3.626 ]
+    Select:
+        Position: [ 4.294, 6.633, 5.193 ]
+        Target: [ 5.027, 6.828, 3.343 ]
+    Zoom:
+        Position: [ 5.200, 6.650, 2.595 ]
+        Target: [ 5.007, 6.391, 0.621 ]
+    Cursor: [ 4.993515, 6.881229, 1.536384 ]
+    State: 2
+    ShowCore: False
+
+CompleteScreen:
+    Atlas: "ForsakenCity"
+    Start: [ -10, 2000 ]
+    Center: [ -10, 1200 ]
+    Offset: [ 0, 0 ]
+    Layers:
+      - Type: layer
+        Images: [ "01" ]
+        Position: [ 0.0, 0.0 ]
+        Scroll: [ 0.0 ]
+      - Type: layer
+        Images: [ "02" ]
+        Position: [ -800.0, -700.0 ]
+        Scroll: [ 0.02 ]
+      - Type: layer
+        Images: [ "03" ]
+        Position: [ -800.0, -700.0 ]
+        Scroll: [ 0.03 ]
+      - Type: layer
+        Images: [ "04" ]
+        Position: [ -800.0, -700.0 ]
+        Scroll: [ 0.04 ]
+      - Type: layer
+        Images: [ "05" ]
+        Position: [ -800.0, -700.0 ]
+        Scroll: [ 0.05 ]
+      - Type: layer
+        Images: [ "snow-back" ]
+        Position: [ -920.0, -720.0 ]
+        Scroll: [ 0.06 ]
+      - Type: layer
+        Images: [ "06" ]
+        Position: [ -800.0, -700.0 ]
+        Scroll: [ 0.07 ]
+      - Type: ui
+        Scroll: [ 0.62 ]
+      - Type: layer
+        Images: [ "07" ]
+        Position: [ -800.0, -700.0 ]
+        Scroll: [ 0.08 ]
+      - Type: layer
+        Images: [ "08" ]
+        Position: [ -800.0, -700.0 ]
+        Scroll: [ 0.10 ]
+      - Type: layer
+        Images: [ "09" ]
+        Position: [ -920.0, -720.0 ]
+        Scroll: [ 0.10 ]
+      - Type: layer
+        Images: [ "10" ]
+        Position: [ -920.0, -720.0 ]
+        Scroll: [ 0.10 ]
+      - Type: layer
+        Images: [ "snow-front" ]
+        Position: [ -920.0, -720.0 ]
+        Scroll: [ 0.12 ]
+      - Type: layer
+        Images: [ "11" ]
+        Position: [ -800.0, -520.0 ]
+        Scroll: [ 0.14 ]
