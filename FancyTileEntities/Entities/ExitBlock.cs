@@ -9,6 +9,13 @@ namespace Celeste.Mod.FancyTileEntities {
 
     [CustomEntity("FancyTileEntities/FancyExitBlock", "FancyTileEntities/FancyConditionBlock=LoadConditionBlock")]
     public class FancyExitBlock : ExitBlock {
+
+        public enum ConditionBlockModes {
+            Key,
+            Button,
+            Strawberry
+        }
+
         private static readonly FieldInfo<TileGrid> f_ExitBlock_tiles;
         private VirtualMap<char> tileMap;
 
@@ -39,27 +46,17 @@ namespace Celeste.Mod.FancyTileEntities {
         }
 
         public static Entity LoadConditionBlock(Level level, LevelData levelData, Vector2 offset, EntityData entityData) {
-            //0=Key, 1=Button, 2=Strawberry
-            int conditionBlockModes = entityData.Int("condition");
+            ConditionBlockModes conditionBlockModes = entityData.Enum("condition", ConditionBlockModes.Key);
             EntityID conditionEntity = EntityID.None;
             string[] condition = entityData.Attr("conditionID").Split(':');
             conditionEntity.Level = condition[0];
             conditionEntity.ID = Convert.ToInt32(condition[1]);
-            bool conditionMet;
-            switch (conditionBlockModes) {
-                case 1:
-                    conditionMet = level.Session.GetFlag(DashSwitch.GetFlagName(conditionEntity));
-                    break;
-                case 0:
-                    conditionMet = level.Session.DoNotLoad.Contains(conditionEntity);
-                    break;
-                case 2:
-                    conditionMet = level.Session.Strawberries.Contains(conditionEntity);
-                    break;
-                default:
-                    throw new Exception("Condition type not supported!");
-            }
-            if (conditionMet) {
+            if (conditionBlockModes switch {
+                ConditionBlockModes.Key => level.Session.GetFlag(DashSwitch.GetFlagName(conditionEntity)),
+                ConditionBlockModes.Button => level.Session.DoNotLoad.Contains(conditionEntity),
+                ConditionBlockModes.Strawberry => level.Session.Strawberries.Contains(conditionEntity),
+                _ => throw new Exception("Condition type not supported!")
+            }) {
                 return new FancyExitBlock(entityData, offset);
             }
             return null;

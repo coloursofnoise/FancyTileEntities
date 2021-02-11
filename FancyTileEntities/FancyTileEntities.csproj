@@ -1,87 +1,37 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2C05C838-94F1-44D7-9078-EA197394879F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Celeste.Mod.FancyTileEntities</RootNamespace>
+    <TargetFrameworks>net452</TargetFrameworks>
     <AssemblyName>FancyTileEntities</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <RootNamespace>Celeste.Mod.FancyTileEntities</RootNamespace>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Celeste">
-      <HintPath>..\..\..\Celeste.exe</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="FNA">
-      <HintPath>..\..\..\FNA.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="MMHOOK_Celeste">
-      <HintPath>..\..\..\MMHOOK_Celeste.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\..\..\Mono.Cecil.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="MonoMod">
-      <HintPath>..\..\..\MonoMod.exe</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="MonoMod.RuntimeDetour">
-      <HintPath>..\..\..\MonoMod.RuntimeDetour.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="MonoMod.Utils">
-      <HintPath>..\..\..\MonoMod.Utils.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet">
-      <HintPath>..\..\..\YamlDotNet.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <PackageReference Include="MonoMod.RuntimeDetour" Version="21.01.11.01" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Entities\BetterRidgeGate.cs" />
-    <Compile Include="Entities\CrumbleWallOnRumble.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Entities\CoverupWall.cs" />
-    <Compile Include="Entities\DashBlock.cs" />
-    <Compile Include="Entities\ExitBlock.cs" />
-    <Compile Include="Entities\FakeWall.cs" />
-    <Compile Include="Entities\FallingBlock.cs" />
-    <Compile Include="LightOccludeList.cs" />
-    <Compile Include="ReflectionExt.cs" />
-    <Compile Include="Entities\RidgeGate.cs" />
-    <Compile Include="Entities\SolidTiles.cs" />
-    <Compile Include="Entities\FinalBossMovingBlock.cs" />
-    <Compile Include="Entities\FloatySpaceBlock.cs" />
-    <Compile Include="Entities\IntroCrusher.cs" />
-    <Compile Include="FancyTileEntitiesModule.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Reference Include="Celeste" HintPath="..\..\..\Celeste.exe" Private="false" />
+    <Reference Include="MMHOOK_Celeste" HintPath="..\..\..\MMHOOK_Celeste.dll" Private="false" />
+    <Reference Include="YamlDotNet" HintPath="..\..\..\YamlDotNet.dll" Private="false" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <Choose>
+    <When Condition="'$(OS)' != 'Windows_NT' Or Exists('..\..\..\FNA.dll')">
+      <ItemGroup>
+        <Reference Include="FNA" HintPath="..\..\..\FNA.dll" Private="false" />
+      </ItemGroup>
+    </When>
+
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.Xna.Framework" HintPath="$(WINDIR)\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.dll" Private="false" />
+        <Reference Include="Microsoft.Xna.Framework.Game" HintPath="$(WINDIR)\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Game\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Game.dll" Private="false" />
+        <Reference Include="Microsoft.Xna.Framework.Graphics" HintPath="$(WINDIR)\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Graphics\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Graphics.dll" Private="false" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  
 </Project>

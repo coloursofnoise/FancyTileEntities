@@ -4,6 +4,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
+using System;
 
 namespace Celeste.Mod.FancyTileEntities {
     public class FancyTileEntitiesModule : EverestModule {
