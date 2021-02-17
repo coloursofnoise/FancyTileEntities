@@ -22,7 +22,7 @@ namespace Celeste.Mod.FancyTileEntities {
         public FancyDashBlock(EntityData data, Vector2 offset, EntityID id)
             : base(data.Position + offset, '3', data.Width, data.Height, data.Bool("blendin", false), data.Bool("permanent", true), data.Bool("canDash", true), id) {
             tileMap = GenerateTileMap(data.Attr("tileData", ""));
-            Collider = GenerateInefficientColliderGrid(tileMap, 8, 8);
+            Collider = GenerateBetterColliderGrid(tileMap, 8, 8);
         }
 
         public override void Awake(Scene scene) {

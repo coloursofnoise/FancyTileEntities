@@ -21,15 +21,8 @@ namespace Celeste.Mod.FancyTileEntities {
         public FancyCrumbleWallOnRumble(EntityData data, Vector2 offset, EntityID id)
             : base(data.Position + offset, data.Char("tiletype", 'm'), data.Width, data.Height, data.Bool("blendin", false), data.Bool("persistent", false), id) {
             tileMap = GenerateTileMap(data.Attr("tileData", ""));
-            ColliderList colliders = new ColliderList();
-            for (int x = 0; x < tileMap.Columns; x++) {
-                for (int y = 0; y < tileMap.Rows; y++) {
-                    if (tileMap.AnyInSegmentAtTile(x, y) && tileMap[x, y] != '0') {
-                        colliders.Add(new Hitbox(8, 8, x * 8, y * 8));
-                        Add(new LightOcclude(new Rectangle(x * 8, y * 8, 8, 8)));
-                    }
-                }
-            }
+            ColliderList colliders = GenerateBetterColliderGrid(tileMap, 8, 8);
+            AddLightOcclude(this, colliders);
             Collider = colliders;
         }
 

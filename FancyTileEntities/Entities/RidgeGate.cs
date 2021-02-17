@@ -18,7 +18,7 @@ namespace Celeste.Mod.FancyTileEntities {
 
             Remove(Get<Image>());
             tileMap = Extensions.GenerateTileMap(data.Attr("tileData", ""));
-            Collider = Extensions.GenerateInefficientColliderGrid(tileMap, 8, 8);
+            Collider = Extensions.GenerateBetterColliderGrid(tileMap, 8, 8);
             Add(tiles = GFX.FGAutotiler.GenerateMap(tileMap, default(Autotiler.Behaviour)).TileGrid);
         }
 

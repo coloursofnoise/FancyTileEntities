@@ -23,7 +23,7 @@ namespace Celeste.Mod.FancyTileEntities {
             : base(data.Position + offset, data.Char("tiletype", '3'), data.Width, data.Height) {
             blendIn = data.Bool("blendIn", true);
             tileMap = GenerateTileMap(data.Attr("tileData", ""));
-            Collider = GenerateInefficientColliderGrid(tileMap, 8, 8);
+            Collider = GenerateBetterColliderGrid(tileMap, 8, 8);
         }
 
         public override void Added(Scene scene) {

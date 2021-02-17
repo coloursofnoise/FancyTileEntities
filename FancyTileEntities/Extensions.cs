@@ -94,6 +94,47 @@ namespace Celeste.Mod.FancyTileEntities {
             return colliders.colliders.Length > 0 ? colliders : null;
         }
 
+        public static ColliderList GenerateBetterColliderGrid(VirtualMap<char> tileMap, int cellWidth, int cellHeight) {
+            ColliderList colliders = new ColliderList();
+            List<Hitbox> prevCollidersOnX = new List<Hitbox>();
+            for (int x = 0; x < tileMap.Columns; x++) {
+                Hitbox prevCollider = null;
+                for (int y = 0; y < tileMap.Rows; y++) {
+                    if (tileMap.AnyInSegmentAtTile(x, y) && tileMap[x, y] != '0') {
+                        if (prevCollider == null)
+                            prevCollider = new Hitbox(cellWidth, cellHeight, x * cellWidth, y * cellHeight);
+                        else
+                            prevCollider = new Hitbox(cellWidth, prevCollider.Height + cellHeight, prevCollider.Position.X, prevCollider.Position.Y);
+                    }
+                    else if (prevCollider != null) {
+                        bool extendedOnX = false;
+                        foreach(Hitbox hitbox in prevCollidersOnX) {
+                            if(hitbox.Position.X + hitbox.Width == prevCollider.Position.X && 
+                               hitbox.Position.Y == prevCollider.Position.Y && 
+                               hitbox.Height == prevCollider.Height) {
+                                // Weird check, but hey.
+                                extendedOnX = true;
+                                hitbox.Width += cellWidth;
+                                prevCollider = null;
+                                break;
+                            }
+                        }
+                        if (!extendedOnX) {
+                            colliders.Add(prevCollider);
+                            prevCollidersOnX.Add(prevCollider);
+                            prevCollider = null;
+                        }
+                    }
+                }
+            }
+            return colliders.colliders.Length > 0 ? colliders : null;
+        }
+
+        public static void AddLightOcclude(Entity entity, ColliderList colliders, float alpha = 1f) {
+            foreach(Hitbox hitbox in colliders.colliders)
+                entity.Add(new LightOcclude(new Rectangle((int) hitbox.Position.X, (int) hitbox.Position.Y, (int) hitbox.Width, (int) hitbox.Height), alpha));
+        }
+
         public static VirtualMap<char> GenerateTileMap(string commaSeparatedString) {
             string[] tileStrings = commaSeparatedString.Split(',');
             tileStrings = Array.ConvertAll(tileStrings, s => s.Trim());

@@ -54,25 +54,10 @@ namespace Celeste.Mod.FancyTileEntities {
             Add(new TileInterceptor(baseData.Get<TileGrid>("sprite"), false));
 
 
-            highlightCollider = new ColliderList();
-            for (int x = 0; x < tileMapHighlighted.Columns; x++) {
-                for (int y = 0; y < tileMapHighlighted.Rows; y++) {
-                    if (tileMapHighlighted.AnyInSegmentAtTile(x, y) && tileMapHighlighted[x, y] != '0') {
-                        highlightCollider.Add(new Hitbox(8, 8, x * 8, y * 8));
-                        Add(new LightOcclude(new Rectangle(x * 8, y * 8, 8, 8)));
-                    }
-                }
-            }
-
-            collider = new ColliderList();
-            for (int x = 0; x < tileMap.Columns; x++) {
-                for (int y = 0; y < tileMap.Rows; y++) {
-                    if (tileMap.AnyInSegmentAtTile(x, y) && tileMap[x, y] != '0') {
-                        collider.Add(new Hitbox(8, 8, x * 8, y * 8));
-                        Add(new LightOcclude(new Rectangle(x * 8, y * 8, 8, 8)));
-                    }
-                }
-            }
+            highlightCollider = GenerateBetterColliderGrid(tileMapHighlighted, 8, 8);
+            collider = GenerateBetterColliderGrid(tileMap, 8, 8);
+            AddLightOcclude(this, highlightCollider);
+            AddLightOcclude(this, collider);
             Collider = collider;
         }
 

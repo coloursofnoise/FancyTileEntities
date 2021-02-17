@@ -26,7 +26,7 @@ namespace Celeste.Mod.FancyTileEntities {
         public FancyExitBlock(EntityData data, Vector2 offset)
             : base(data.Position + offset, data.Width, data.Height, data.Char("tileType", '3')) {
             tileMap = GenerateTileMap(data.Attr("tileData", ""));
-            Collider = GenerateInefficientColliderGrid(tileMap, 8, 8);
+            Collider = GenerateBetterColliderGrid(tileMap, 8, 8);
         }
 
         public override void Added(Scene scene) {
