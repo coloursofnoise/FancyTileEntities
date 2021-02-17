@@ -32,7 +32,9 @@ namespace Celeste.Mod.FancyTileEntities {
             badLightOcclude = Get<LightOcclude>();
 
             tileMap = GenerateTileMap(data.Attr("tileData", ""));
-            Collider = GenerateBetterColliderGrid(tileMap, 8, 8);
+            ColliderList colliders = GenerateBetterColliderGrid(tileMap, 8, 8);
+            Collider = colliders;
+            AddLightOcclude(this, colliders);
         }
 
         internal static void Awake(On.Celeste.FloatySpaceBlock.orig_Awake orig, FloatySpaceBlock self, Scene scene) {

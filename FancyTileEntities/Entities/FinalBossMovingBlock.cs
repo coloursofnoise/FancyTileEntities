@@ -56,7 +56,6 @@ namespace Celeste.Mod.FancyTileEntities {
 
             highlightCollider = GenerateBetterColliderGrid(tileMapHighlighted, 8, 8);
             collider = GenerateBetterColliderGrid(tileMap, 8, 8);
-            AddLightOcclude(this, highlightCollider);
             AddLightOcclude(this, collider);
             Collider = collider;
         }
@@ -70,6 +69,8 @@ namespace Celeste.Mod.FancyTileEntities {
             base.Update();
             if (!wasHighlighted && baseData.Get<bool>("isHighlighted")) {
                 Collider = highlightCollider;
+                Components.RemoveAll<LightOcclude>();
+                AddLightOcclude(this, highlightCollider);
                 wasHighlighted = true;
             }
         }
