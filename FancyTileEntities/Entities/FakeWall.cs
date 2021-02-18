@@ -15,7 +15,7 @@ namespace Celeste.Mod.FancyTileEntities {
             baseData = new DynData<FakeWall>(this);
 
             tileMap = Extensions.GenerateTileMap(data.Attr("tileData", ""));
-            Collider = Extensions.GenerateInefficientColliderGrid(tileMap, 8, 8);
+            Collider = Extensions.GenerateBetterColliderGrid(tileMap, 8, 8);
         }
 
         public override void Added(Scene scene) {
