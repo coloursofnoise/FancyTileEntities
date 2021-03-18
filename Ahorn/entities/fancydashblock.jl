@@ -4,15 +4,15 @@ using ..Ahorn, Maple
 using Ahorn.AhornTileEntity
 
 @mapdef Entity "FancyTileEntities/FancyDashBlock" FancyDashBlock(x::Int, y::Int,
-	width::Int=Maple.defaultBlockWidth, height::Int=Maple.defaultBlockHeight,
-	blendin::Bool=true, canDash::Bool=true,
-	permanent::Bool=true, tileData::String="")
+   width::Int=Maple.defaultBlockWidth, height::Int=Maple.defaultBlockHeight,
+   blendin::Bool=true, canDash::Bool=true,
+   permanent::Bool=true, tileData::String="")
 
 const placements = Ahorn.PlacementDict(
    "Dash Block (FancyTileEntities)" => Ahorn.EntityPlacement(
       FancyDashBlock,
       "rectangle",
-		Dict{String, Any}()
+      Dict{String, Any}()
    ),
 )
 

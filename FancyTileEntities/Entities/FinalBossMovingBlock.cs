@@ -4,6 +4,7 @@ using Monocle;
 using MonoMod.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using static Celeste.Mod.FancyTileEntities.Extensions;
 
@@ -41,11 +42,11 @@ namespace Celeste.Mod.FancyTileEntities {
 
             int newSeed = Calc.Random.Next();
             Calc.PushRandom(newSeed);
-            baseData["sprite"] = GFX.FGAutotiler.GenerateMap(tileMap, false).TileGrid;
+            baseData["sprite"] = GFX.FGAutotiler.GenerateMap(tileMap, default(Autotiler.Behaviour)).TileGrid;
             Add(baseData.Get<TileGrid>("sprite"));
             Calc.PopRandom();
             Calc.PushRandom(newSeed);
-            TileGrid highlight = GFX.FGAutotiler.GenerateMap(tileMapHighlighted, false).TileGrid;
+            TileGrid highlight = GFX.FGAutotiler.GenerateMap(tileMapHighlighted, default(Autotiler.Behaviour)).TileGrid;
             highlight.Alpha = 0f;
             baseData["highlight"] = highlight;
             Add(baseData.Get<TileGrid>("highlight"));
@@ -69,7 +70,8 @@ namespace Celeste.Mod.FancyTileEntities {
             base.Update();
             if (!wasHighlighted && baseData.Get<bool>("isHighlighted")) {
                 Collider = highlightCollider;
-                Components.RemoveAll<LightOcclude>();
+                foreach (LightOcclude occlude in Components.GetAll<LightOcclude>().ToList()) // Cannot modify collection while iterating
+                    Remove(occlude);
                 AddLightOcclude(this, highlightCollider);
                 wasHighlighted = true;
             }
