@@ -1,9 +1,6 @@
 - Name: FancyTileEntities
-  Version: 1.4.0
+  Version: 1.4.2
   DLL: FancyTileEntities/bin/Debug/net452/FancyTileEntities.dll
   Dependencies:
     - Name: Everest
       Version: 1.0.0
-
-
-      
