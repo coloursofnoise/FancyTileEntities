@@ -1,10 +1,9 @@
-﻿using Monocle;
-using Mono.Cecil;
+﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
-using System;
 
 namespace Celeste.Mod.FancyTileEntities {
     public class FancyTileEntitiesModule : EverestModule {
@@ -15,6 +14,7 @@ namespace Celeste.Mod.FancyTileEntities {
             //IL.Celeste.LightingRenderer.DrawLightOccluders += LightingRenderer_DrawLightOccluders;
 
             Extensions.Load();
+            TileSeedController.Load();
 
             On.Celeste.CrumbleWallOnRumble.Break += FancyCrumbleWallOnRumble.Break;
             On.Celeste.DashBlock.Break_Vector2_Vector2_bool_bool += FancyDashBlock.Break;
@@ -34,6 +34,7 @@ namespace Celeste.Mod.FancyTileEntities {
             //IL.Celeste.LightingRenderer.DrawLightOccluders -= LightingRenderer_DrawLightOccluders;
 
             Extensions.Unload();
+            TileSeedController.Unload();
 
             On.Celeste.CrumbleWallOnRumble.Break -= FancyCrumbleWallOnRumble.Break;
             On.Celeste.DashBlock.Break_Vector2_Vector2_bool_bool -= FancyDashBlock.Break;

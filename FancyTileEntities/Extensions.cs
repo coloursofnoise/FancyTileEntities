@@ -37,26 +37,32 @@ namespace Celeste.Mod.FancyTileEntities {
             On.Celeste.Autotiler.CheckTile -= Autotiler_CheckTile;
         }
 
-        public static void CopyInto<T>(this VirtualMap<T> src, VirtualMap<T> virtualMap, Point position, bool blindCopy = false) {
-            if (!blindCopy && (virtualMap.Rows < src.Rows - position.Y || virtualMap.Columns < src.Columns - position.X)) {
+        public static IEnumerable<T> GetEnumerator<T>(this VirtualMap<T> map) {
+            for (int y = 0; y < map.Rows; y++)
+                for (int x = 0; x < map.Columns; x++)
+                    yield return map[x, y];
+        }
+
+        public static void CopyInto<T>(this VirtualMap<T> src, VirtualMap<T> dest, Point position, bool blindCopy = false) {
+            if (!blindCopy && (dest.Rows < src.Rows - position.Y || dest.Columns < src.Columns - position.X)) {
                 throw new IndexOutOfRangeException("Destination not large enough to hold contents of source. \n Set `blindCopy` to true to disregard this message.");
             }
             if (blindCopy) {
-                for (int x = 0; x < Math.Min(src.Columns, virtualMap.Columns); x++) {
-                    for (int y = 0; y < Math.Min(src.Rows, virtualMap.Rows); y++) {
-                        virtualMap[position.X + x, position.Y + y] = src[x, y];
+                for (int x = 0; x < Math.Min(src.Columns, dest.Columns); x++) {
+                    for (int y = 0; y < Math.Min(src.Rows, dest.Rows); y++) {
+                        dest[position.X + x, position.Y + y] = src[x, y];
                     }
                 }
             } else {
                 for (int x = 0; x < src.Columns; x++) {
                     for (int y = 0; y < src.Rows; y++) {
-                        virtualMap[position.X + x, position.Y + y] = src[x, y];
+                        dest[position.X + x, position.Y + y] = src[x, y];
                     }
                 }
             }
         }
-        public static void CopyInto<T>(this VirtualMap<T> src, VirtualMap<T> virtualMap, bool blindCopy = false) {
-            src.CopyInto(virtualMap, Point.Zero, blindCopy);
+        public static void CopyInto<T>(this VirtualMap<T> src, VirtualMap<T> dest, bool blindCopy = false) {
+            src.CopyInto(dest, Point.Zero, blindCopy);
         }
 
         public static ColliderList GenerateInefficientColliderGrid(VirtualMap<char> tileMap, int cellWidth, int cellHeight) {
