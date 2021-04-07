@@ -103,35 +103,45 @@ namespace Celeste.Mod.FancyTileEntities {
         public static ColliderList GenerateBetterColliderGrid(VirtualMap<char> tileMap, int cellWidth, int cellHeight) {
             ColliderList colliders = new ColliderList();
             List<Hitbox> prevCollidersOnX = new List<Hitbox>();
+            Hitbox prevCollider = null;
+
+            void ExtendOrAdd() {
+                bool extendedOnX = false;
+                foreach (Hitbox hitbox in prevCollidersOnX) {
+                    if (hitbox.Position.X + hitbox.Width == prevCollider.Position.X &&
+                       hitbox.Position.Y == prevCollider.Position.Y &&
+                       hitbox.Height == prevCollider.Height) {
+                        // Weird check, but hey.
+                        extendedOnX = true;
+                        hitbox.Width += cellWidth;
+                        prevCollider = null;
+                        break;
+                    }
+                }
+                if (!extendedOnX) {
+                    colliders.Add(prevCollider);
+                    prevCollidersOnX.Add(prevCollider);
+                    prevCollider = null;
+                }
+            }
+
             for (int x = 0; x < tileMap.Columns; x++) {
-                Hitbox prevCollider = null;
                 for (int y = 0; y < tileMap.Rows; y++) {
                     if (tileMap.AnyInSegmentAtTile(x, y) && tileMap[x, y] != '0') {
                         if (prevCollider == null)
                             prevCollider = new Hitbox(cellWidth, cellHeight, x * cellWidth, y * cellHeight);
                         else
-                            prevCollider = new Hitbox(cellWidth, prevCollider.Height + cellHeight, prevCollider.Position.X, prevCollider.Position.Y);
-                    }
-                    else if (prevCollider != null) {
-                        bool extendedOnX = false;
-                        foreach(Hitbox hitbox in prevCollidersOnX) {
-                            if(hitbox.Position.X + hitbox.Width == prevCollider.Position.X && 
-                               hitbox.Position.Y == prevCollider.Position.Y && 
-                               hitbox.Height == prevCollider.Height) {
-                                // Weird check, but hey.
-                                extendedOnX = true;
-                                hitbox.Width += cellWidth;
-                                prevCollider = null;
-                                break;
-                            }
-                        }
-                        if (!extendedOnX) {
-                            colliders.Add(prevCollider);
-                            prevCollidersOnX.Add(prevCollider);
-                            prevCollider = null;
-                        }
+                            prevCollider.Height += cellHeight;
+
+                    } else if (prevCollider != null) {
+                        ExtendOrAdd();
                     }
                 }
+
+                if (prevCollider != null) {
+                    ExtendOrAdd();
+                }
+
             }
             return colliders.colliders.Length > 0 ? colliders : null;
         }

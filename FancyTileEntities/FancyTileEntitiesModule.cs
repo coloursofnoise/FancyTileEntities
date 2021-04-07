@@ -26,7 +26,7 @@ namespace Celeste.Mod.FancyTileEntities {
             On.Celeste.FinalBossMovingBlock.StopParticles += FancyFinalBossMovingBlock.StopParticles;
             On.Celeste.FinalBossMovingBlock.ImpactParticles += FancyFinalBossMovingBlock.ImpactParticles;
             On.Celeste.FinalBossMovingBlock.Finish += FancyFinalBossMovingBlock.Finish; 
-            On.Celeste.FloatySpaceBlock.Awake += FancyFloatySpaceBlock.Awake;
+            IL.Celeste.FloatySpaceBlock.Awake += FancyFloatySpaceBlock.Awake;
             On.Celeste.RidgeGate.EnterSequence += FancyRidgeGate.EnterSequence;
         }
 
@@ -43,7 +43,8 @@ namespace Celeste.Mod.FancyTileEntities {
             On.Celeste.FinalBossMovingBlock.StopParticles -= FancyFinalBossMovingBlock.StopParticles;
             On.Celeste.FinalBossMovingBlock.ImpactParticles -= FancyFinalBossMovingBlock.ImpactParticles;
             On.Celeste.FinalBossMovingBlock.Finish -= FancyFinalBossMovingBlock.Finish;
-            On.Celeste.FloatySpaceBlock.Awake -= FancyFloatySpaceBlock.Awake;
+            IL.Celeste.FloatySpaceBlock.Awake -= FancyFloatySpaceBlock.Awake;
+            On.Celeste.RidgeGate.EnterSequence -= FancyRidgeGate.EnterSequence;
         }
 
         private void LightingRenderer_DrawLightOccluders(ILContext il) {

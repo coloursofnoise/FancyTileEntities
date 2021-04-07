@@ -1,9 +1,13 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
+using Mono.Cecil;
+using Mono.Cecil.Cil;
 using Monocle;
+using MonoMod.Cil;
 using MonoMod.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using static Celeste.Mod.FancyTileEntities.Extensions;
 
@@ -12,18 +16,12 @@ namespace Celeste.Mod.FancyTileEntities {
     [CustomEntity("FancyTileEntities/FancyFloatySpaceBlock")]
     [TrackedAs(typeof(FloatySpaceBlock))]
     public class FancyFloatySpaceBlock : FloatySpaceBlock {
-        private static readonly MethodInfo m_AddToGroupAndFindChildren;
-        private static readonly MethodInfo m_TryToInitPosition;
-        private static readonly FieldInfo<char> f_tileType;
         private static readonly FieldInfo<HashSet<Actor>> f_Solid_riders;
 
         private VirtualMap<char> tileMap;
         private LightOcclude badLightOcclude;
 
         static FancyFloatySpaceBlock() {
-            m_AddToGroupAndFindChildren = typeof(FloatySpaceBlock).GetMethod("AddToGroupAndFindChildren", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-            m_TryToInitPosition = typeof(FloatySpaceBlock).GetMethod("TryToInitPosition", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-            f_tileType = typeof(FloatySpaceBlock).GetField<char>("tileType", BindingFlags.NonPublic | BindingFlags.Instance);
             f_Solid_riders = typeof(Solid).GetField<HashSet<Actor>>("riders", BindingFlags.NonPublic | BindingFlags.Static);
         }
 
@@ -37,55 +35,23 @@ namespace Celeste.Mod.FancyTileEntities {
             AddLightOcclude(this, colliders);
         }
 
-        internal static void Awake(On.Celeste.FloatySpaceBlock.orig_Awake orig, FloatySpaceBlock self, Scene scene) {
-            IntPtr ptr = typeof(Solid).GetMethod("Awake").MethodHandle.GetFunctionPointer();
-            Action<Scene> awake_Solid = (Action<Scene>) Activator.CreateInstance(typeof(Action<Scene>), self, ptr);
-            awake_Solid(scene);
+        internal static void Awake(ILContext il) {
+            ILCursor cursor = new ILCursor(il);
 
-            DynData<FloatySpaceBlock> baseData = new DynData<FloatySpaceBlock>(self);
-
-            baseData["awake"] = true;
-            if (!self.HasGroup) {
-                baseData["MasterOfGroup"] = true;
-                self.Moves = new Dictionary<Platform, Vector2>();
-                self.Group = new List<FloatySpaceBlock>();
-                self.Jumpthrus = new List<JumpThru>();
-                self.GroupBoundsMin = new Point((int) self.X, (int) self.Y);
-                self.GroupBoundsMax = new Point((int) self.Right, (int) self.Bottom);
-                m_AddToGroupAndFindChildren.Invoke(self, new object[] { self });
-
-                Rectangle rectangle = new Rectangle(self.GroupBoundsMin.X / 8, self.GroupBoundsMin.Y / 8, (self.GroupBoundsMax.X - self.GroupBoundsMin.X) / 8 + 1, (self.GroupBoundsMax.Y - self.GroupBoundsMin.Y) / 8 + 1);
-                VirtualMap<char> virtualMap = new VirtualMap<char>(rectangle.Width, rectangle.Height, '0');
-                foreach (FloatySpaceBlock floatySpaceBlock in self.Group) {
-                    if (floatySpaceBlock is FancyFloatySpaceBlock) {
-                        Point offset = new Point((int) (floatySpaceBlock.X / 8f) - rectangle.X, (int) (floatySpaceBlock.Y / 8f) - rectangle.Y);
-                        (floatySpaceBlock as FancyFloatySpaceBlock).tileMap.CopyInto(virtualMap, offset);
-                    } else {
-                        char tileType = f_tileType.GetValue(floatySpaceBlock);
-
-                        int xOffset = (int) (floatySpaceBlock.X / 8f) - rectangle.X;
-                        int yOffset = (int) (floatySpaceBlock.Y / 8f) - rectangle.Y;
-                        int w = (int) (floatySpaceBlock.Width / 8f);
-                        int h = (int) (floatySpaceBlock.Height / 8f);
-                        for (int x = xOffset; x < xOffset + w; x++) {
-                            for (int y = yOffset; y < yOffset + h; y++) {
-                                virtualMap[x, y] = tileType;
-                            }
-                        }
+            cursor.GotoNext(MoveType.After, instr => instr.Match(OpCodes.Endfinally), instr => instr.Match(OpCodes.Ldarg_0));
+            // Can't use `cursor.MoveAfterLabels` because ????
+            cursor.Emit(OpCodes.Ldloc_S, il.Body.Variables.First(v => v.VariableType.Name == "VirtualMap`1"));
+            cursor.EmitDelegate<Action<FloatySpaceBlock, VirtualMap<char>>>((block, map) => {
+                Rectangle rect = new Rectangle(block.GroupBoundsMin.X / 8, block.GroupBoundsMin.Y / 8,
+                    (block.GroupBoundsMax.X - block.GroupBoundsMin.X) / 8 + 1, (block.GroupBoundsMax.Y - block.GroupBoundsMin.Y) / 8 + 1);
+                foreach (FloatySpaceBlock child in block.Group) {
+                    if (child is FancyFloatySpaceBlock fancyBlock) {
+                        Point offset = new Point((int) (fancyBlock.X / 8f) - rect.X, (int) (fancyBlock.Y / 8f) - rect.Y);
+                        fancyBlock.tileMap.CopyInto(map, offset);
                     }
                 }
-
-                TileGrid tiles = GFX.FGAutotiler.GenerateMap(virtualMap, new Autotiler.Behaviour {
-                    EdgesExtend = false,
-                    EdgesIgnoreOutOfLevel = false,
-                    PaddingIgnoreOutOfLevel = false
-                }).TileGrid;
-
-                tiles.Position = new Vector2(self.GroupBoundsMin.X - self.X, self.GroupBoundsMin.Y - self.Y);
-                baseData["tiles"] = tiles;
-                self.Add(baseData.Get<TileGrid>("tiles"));
-            }
-            m_TryToInitPosition.Invoke(self, default);
+            });
+            cursor.Emit(OpCodes.Ldarg_0);
         }
 
         public override void Added(Scene scene) {
