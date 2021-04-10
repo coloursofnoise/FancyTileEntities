@@ -8,11 +8,13 @@ using System.Reflection;
 namespace Celeste.Mod.FancyTileEntities {
     public static partial class Extensions {
         private static readonly Type Autotiler_Tiles;
+        private static readonly Type Autotiler_TerrainType;
         private static readonly FieldInfo<List<MTexture>> f_Tiles_Textures;
         private static readonly FieldInfo<bool> f_Tiles_HasOverlays;
         private static readonly FieldInfo<List<string>> f_Tiles_OverlapSprites;
 
         private static readonly MethodInfo m_TileHandler;
+        private static readonly MethodInfo m_TerrainType_Ignore;
 
         private static bool usingCustomAutotiler;
         private static VirtualMap<char> forceData_CustomAutotiler;
@@ -20,11 +22,13 @@ namespace Celeste.Mod.FancyTileEntities {
 
         static Extensions() {
             Autotiler_Tiles = typeof(Autotiler).GetNestedType("Tiles", BindingFlags.NonPublic);
+            Autotiler_TerrainType = typeof(Autotiler).GetNestedType("TerrainType", BindingFlags.NonPublic);
             f_Tiles_Textures = Autotiler_Tiles.GetField<List<MTexture>>("Textures");
             f_Tiles_HasOverlays = Autotiler_Tiles.GetField<bool>("HasOverlays");
             f_Tiles_OverlapSprites = Autotiler_Tiles.GetField<List<string>>("OverlapSprites");
 
             m_TileHandler = typeof(Autotiler).GetMethod("TileHandler", BindingFlags.NonPublic | BindingFlags.Instance);
+            m_TerrainType_Ignore = Autotiler_TerrainType.GetMethod("Ignore");
 
             usingCustomAutotiler = false;
         }
@@ -228,12 +232,17 @@ namespace Celeste.Mod.FancyTileEntities {
         private static bool Autotiler_CheckTile(On.Celeste.Autotiler.orig_CheckTile orig, Autotiler self, object set, VirtualMap<char> mapData, int x, int y, Rectangle forceFill, Autotiler.Behaviour behaviour) {
             if (usingCustomAutotiler) {
                 Point origin = startPoint_CustomAutotiler;
-                if (IsEmpty(forceData_CustomAutotiler[x - origin.X, y - origin.Y])) {
+                char c = forceData_CustomAutotiler[x - origin.X, y - origin.Y];
+                if (IsEmpty(c)) {
                     forceFill = Rectangle.Empty;
+                } else if ((bool) m_TerrainType_Ignore.Invoke(set, new object[] { c })) {
+                    // Hack to make sure `ignores` attributes are respected
+                    return false;
                 }
             }
             return orig(self, set, mapData, x, y, forceFill, behaviour);
         }
+
         public static bool IsEmpty(char id) {
             return id == '0' || id == '\0';
         }
