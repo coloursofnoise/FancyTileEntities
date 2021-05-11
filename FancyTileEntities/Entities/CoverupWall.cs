@@ -1,6 +1,7 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
+using MonoMod;
 using System;
 using System.Reflection;
 using static Celeste.Mod.FancyTileEntities.Extensions;
@@ -26,10 +27,13 @@ namespace Celeste.Mod.FancyTileEntities {
             Collider = GenerateBetterColliderGrid(tileMap, 8, 8);
         }
 
+        [MonoModLinkTo("Monocle.Entity", "System.Void Added(Monocle.Scene)")]
+        public void base_Added(Scene scene) {
+            base.Added(scene);
+        }
+
         public override void Added(Scene scene) {
-            IntPtr ptr = typeof(Entity).GetMethod("Added").MethodHandle.GetFunctionPointer();
-            Action<Scene> m_Entity_added = (Action<Scene>) Activator.CreateInstance(typeof(Action<Scene>), this, ptr);
-            m_Entity_added(scene);
+            base_Added(scene);
 
             if (blendIn) {
                 Level level = SceneAs<Level>();

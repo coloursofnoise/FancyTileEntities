@@ -1,6 +1,7 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
+using MonoMod;
 using MonoMod.Utils;
 using System;
 using System.Reflection;
@@ -26,10 +27,13 @@ namespace Celeste.Mod.FancyTileEntities {
             Collider = colliders;
         }
 
+        [MonoModLinkTo("Celeste.Solid", "System.Void Awake(Monocle.Scene)")]
+        public void base_Awake(Scene scene) {
+            base.Awake(scene);
+        }
+
         public override void Awake(Scene scene) {
-            IntPtr ptr = typeof(Solid).GetMethod("Awake").MethodHandle.GetFunctionPointer();
-            Action<Scene> awake_Solid = (Action<Scene>) Activator.CreateInstance(typeof(Action<Scene>), this, ptr);
-            awake_Solid(scene);
+            base_Awake(scene);
 
             TileGrid tileGrid;
             if (!f_CrumbleWallOnRumble_blendIn[this]) {
