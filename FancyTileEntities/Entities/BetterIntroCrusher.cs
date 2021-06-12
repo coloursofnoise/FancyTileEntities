@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 
 namespace Celeste.Mod.FancyTileEntities {
+    [CustomEntity("FancyTileEntities/BetterIntroCrusher")]
     public class BetterIntroCrusher : IntroCrusher {
 
         protected bool manualTrigger;

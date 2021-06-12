@@ -35,6 +35,10 @@ placements.entities.FancyTileEntities/FancyFinalBossMovingBlock.tooltips.tileDat
 placements.entities.FancyTileEntities/FancyFloatySpaceBlock.tooltips.connectsTo=Blocks with the same connect index will connect to eachother.
 placements.entities.FancyTileEntities/FancyFloatySpaceBlock.tooltips.disableSpawnOffset=Whether or not the entity should spawn without the random offset.
 
+# Better Intro Crusher
+placements.entities.FancyTileEntities/BetterIntroCrusher.tooltips.flags=If any of the flags are set, the entity will rest at its end node instead.
+placements.entities.FancyTileEntities/BetterIntroCrusher.tooltips.manualTrigger=For use with an EntityTrigger.
+
 # Intro Crusher
 placements.entities.FancyTileEntities/FancyIntroCrusher.tooltips.flags=If any of the flags are set, the entity will rest at its end node instead.
 placements.entities.FancyTileEntities/FancyIntroCrusher.tooltips.manualTrigger=For use with an EntityTrigger.
