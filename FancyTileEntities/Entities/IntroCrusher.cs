@@ -1,7 +1,6 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
-using MonoMod.Utils;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,10 +9,9 @@ using static Celeste.Mod.FancyTileEntities.Extensions;
 namespace Celeste.Mod.FancyTileEntities {
 
     [CustomEntity("FancyTileEntities/FancyIntroCrusher")]
-    class FancyIntroCrusher : IntroCrusher {
+    class FancyIntroCrusher : BetterIntroCrusher {
         private static readonly FieldInfo<HashSet<Actor>> f_Solid_riders;
 
-        private DynData<IntroCrusher> baseData;
         private VirtualMap<char> tileMap;
 
         static FancyIntroCrusher() {
@@ -22,7 +20,6 @@ namespace Celeste.Mod.FancyTileEntities {
 
         public FancyIntroCrusher(EntityData data, Vector2 offset)
             : base(data, offset) {
-            baseData = new DynData<IntroCrusher>(this);
             Remove(baseData.Get<TileGrid>("tilegrid"));
 
             tileMap = GenerateTileMap(data.Attr("tileData", ""));
