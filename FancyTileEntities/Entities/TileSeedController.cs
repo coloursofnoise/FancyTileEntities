@@ -64,6 +64,7 @@ namespace Celeste.Mod.FancyTileEntities {
                     }
 
                     Calc.PushRandom(randomSeed);
+                    Extensions.RNGSeed = randomSeed;
                     Autotiler.Generated gen = Extensions.GenerateOverlay(GFX.FGAutotiler, map, bounds.X - tileBounds.Left, bounds.Y - tileBounds.Top, self.Level.SolidsData, behaviour, positionBased);
                     Calc.PopRandom();
 
