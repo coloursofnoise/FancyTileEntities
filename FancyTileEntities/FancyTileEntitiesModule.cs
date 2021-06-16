@@ -19,6 +19,7 @@ namespace Celeste.Mod.FancyTileEntities {
             On.Celeste.CrumbleWallOnRumble.Break += FancyCrumbleWallOnRumble.Break;
             On.Celeste.DashBlock.Break_Vector2_Vector2_bool_bool += FancyDashBlock.Break;
             On.Celeste.IntroCrusher.Sequence += BetterIntroCrusher.Sequence;
+            On.Celeste.FallingBlock.PlayerFallCheck += FancyFallingBlock.FallingBlock_PlayerFallCheck;
             On.Celeste.FallingBlock.LandParticles += FancyFallingBlock.LandParticles;
             hook_FallingBlock_Sequence = new ILHook(
                 typeof(FallingBlock).GetMethod("Sequence", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetStateMachineTarget(),

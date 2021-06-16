@@ -5,7 +5,9 @@ using Ahorn.AhornTileEntity
 
 @mapdef Entity "FancyTileEntities/FancyFallingBlock" FancyFallingBlock(x::Int, y::Int,
 	width::Int=Maple.defaultBlockWidth, height::Int=Maple.defaultBlockHeight,
-	climbFall::Bool=true, behind::Bool=false, tileData::String="", tileDataHighlight::String="")
+	climbFall::Bool=true, behind::Bool=false, tileData::String="", tileDataHighlight::String="",
+	manualTrigger::Bool=false,
+)
 
 const placements = Ahorn.PlacementDict(
 	 "Falling Block (FancyTileEntities)" => Ahorn.EntityPlacement(

@@ -15,21 +15,16 @@ namespace Celeste.Mod.FancyTileEntities {
     [CustomEntity("FancyTileEntities/FancyFallingBlock")]
     [TrackedAs(typeof(FallingBlock))]
     public class FancyFallingBlock : FallingBlock {
-        private static readonly FieldInfo<HashSet<Actor>> f_Solid_solidRiders;
-        private static readonly FieldInfo f_Sequence_this;
+        private static readonly FieldInfo<HashSet<Actor>> f_Solid_solidRiders = typeof(Solid).GetField<HashSet<Actor>>("riders", BindingFlags.NonPublic | BindingFlags.Static);
+        private static readonly FieldInfo f_Sequence_this = typeof(FallingBlock).GetNestedType("<Sequence>d__21", BindingFlags.NonPublic).GetField("<>4__this", BindingFlags.Public | BindingFlags.Instance);
+
+        private bool manualTrigger;
 
         private DynData<FallingBlock> baseData;
 
         private VirtualMap<char> tileMap;
         private AnimatedTiles animatedTiles;
         private LightOcclude badLightOcclude;
-
-        static FancyFallingBlock() {
-            f_Solid_solidRiders = typeof(Solid).GetField<HashSet<Actor>>("riders", BindingFlags.NonPublic | BindingFlags.Static);
-
-            // For whatever reason you can't get this from the ILContext object
-            f_Sequence_this = typeof(FallingBlock).GetNestedType("<Sequence>d__21", BindingFlags.NonPublic).GetField("<>4__this", BindingFlags.Public | BindingFlags.Instance);
-        }
 
         internal static void Sequence(ILContext il) {
             FieldReference fieldRef = il.Import(f_Sequence_this);
@@ -50,6 +45,10 @@ namespace Celeste.Mod.FancyTileEntities {
             c.Emit(OpCodes.Call, typeRef.FindMethod("System.Void FallParticles()"));
             c.Emit(OpCodes.Br, after);
         }
+
+        internal static bool FallingBlock_PlayerFallCheck(On.Celeste.FallingBlock.orig_PlayerFallCheck orig, FallingBlock self) =>
+            ((self as FancyFallingBlock)?.manualTrigger == true) ? false : orig(self);
+
 
         public FancyFallingBlock(EntityData data, Vector2 offset)
             : base(data.Position + offset, '3', data.Width, data.Height, data.Bool("finalBoss", false), data.Bool("behind", false), data.Bool("climbFall", true)) {
@@ -82,6 +81,10 @@ namespace Celeste.Mod.FancyTileEntities {
             AddLightOcclude(this, colliders);
             Collider = colliders;
             Add(new TileInterceptor(baseData.Get<TileGrid>("tiles"), false));
+
+            manualTrigger = data.Bool("manualTrigger");
+            if (manualTrigger)
+                Add(new EntityTriggerListener(() => Triggered = true, () => Triggered = true));
         }
 
         public override void Added(Scene scene) {
