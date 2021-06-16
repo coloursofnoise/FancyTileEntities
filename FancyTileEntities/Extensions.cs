@@ -178,18 +178,18 @@ namespace Celeste.Mod.FancyTileEntities {
             return new VirtualMap<char>(tileData);
         }
 
-        public static Autotiler.Generated GenerateOverlay(this Autotiler tiler, VirtualMap<char> tileMap, int x, int y, VirtualMap<char> mapData, bool usePosition) {
+        public static Autotiler.Generated GenerateOverlay(this Autotiler tiler, VirtualMap<char> tileMap, int x, int y, VirtualMap<char> mapData) {
             Autotiler.Behaviour behaviour = new Autotiler.Behaviour {
                 EdgesExtend = true,
                 EdgesIgnoreOutOfLevel = true,
                 PaddingIgnoreOutOfLevel = true
             };
-            return tiler.Generate(mapData, x, y, tileMap, behaviour, usePosition);
+            return tiler.Generate(mapData, x, y, tileMap, behaviour);
         }
-        public static Autotiler.Generated GenerateOverlay(this Autotiler tiler, VirtualMap<char> tileMap, int x, int y, VirtualMap<char> mapData, Autotiler.Behaviour behaviour, bool usePosition) {
-            return tiler.Generate(mapData, x, y, tileMap, behaviour, usePosition);
+        public static Autotiler.Generated GenerateOverlay(this Autotiler tiler, VirtualMap<char> tileMap, int x, int y, VirtualMap<char> mapData, Autotiler.Behaviour behaviour) {
+            return tiler.Generate(mapData, x, y, tileMap, behaviour);
         }
-        private static Autotiler.Generated Generate(this Autotiler tiler, VirtualMap<char> mapData, int startX, int startY, VirtualMap<char> forceData, Autotiler.Behaviour behaviour, bool usePosition) {
+        private static Autotiler.Generated Generate(this Autotiler tiler, VirtualMap<char> mapData, int startX, int startY, VirtualMap<char> forceData, Autotiler.Behaviour behaviour) {
             usingCustomAutotiler = true;
             forceData_CustomAutotiler = forceData;
             startPoint_CustomAutotiler = new Point(startX, startY);
@@ -210,9 +210,10 @@ namespace Celeste.Mod.FancyTileEntities {
                             while (l < num2) {
                                 object tiles = m_TileHandler.Invoke(tiler, new object[] { mapData, k, l, empty, forceData[k - startX, l - startY], behaviour });
                                 if (tiles != null) {
-                                    tileGrid.Tiles[k - startX, l - startY] = usePosition ? f_Tiles_Textures.GetValue(tiles).Choose(k - startX, l - startY) : Calc.Random.Choose(f_Tiles_Textures.GetValue(tiles));
+                                    (Calc.Random as PositionRandom)?.SetPosition(k - startX, l - startY);
+                                    tileGrid.Tiles[k - startX, l - startY] = Calc.Random.Choose(f_Tiles_Textures.GetValue(tiles));
                                     if (f_Tiles_HasOverlays.GetValue(tiles)) {
-                                        animatedTiles.Set(k - startX, l - startY, usePosition ? f_Tiles_OverlapSprites.GetValue(tiles).Choose(k - startX, l - startY) : Calc.Random.Choose(f_Tiles_OverlapSprites.GetValue(tiles)), 1f, 1f);
+                                        animatedTiles.Set(k - startX, l - startY, Calc.Random.Choose(f_Tiles_OverlapSprites.GetValue(tiles)), 1f, 1f);
                                     }
                                 }
                                 l++;
@@ -245,27 +246,6 @@ namespace Celeste.Mod.FancyTileEntities {
 
         public static bool IsEmpty(char id) {
             return id == '0' || id == '\0';
-        }
-
-        public static long RNGSeed = 0x1234;
-        public static int PositionBasedRNG(int x, int y) {
-            return PositionBasedRNG(x, y, RNGSeed);
-        }
-        public static int PositionBasedRNG(int x, int y, long seed) {
-            long a = x + 1;
-            long b = y + 1;
-
-            a = (a * 400000) % 715827881;
-            b = (b * 400001) % 715827883;
-            seed = (seed * 400002) % 715827947;
-
-            return (int)(a + b + seed);
-        }
-        public static T Choose<T>(this List<T> list, int x, int y) {
-            return Choose(list, x, y, RNGSeed);
-        }
-        public static T Choose<T>(this List<T> list, int x, int y, long seed) {
-            return list[PositionBasedRNG(x, y, seed) % list.Count];
         }
 
     }
