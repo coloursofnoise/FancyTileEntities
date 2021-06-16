@@ -48,6 +48,7 @@ namespace Celeste.Mod.FancyTileEntities {
                 LevelData level = controller.level;
 
                 int randomSeed = data.Int("randomSeed", 42);
+                bool positionBased = data.Bool("localPosition", true);
 
                 Rectangle bounds = level.TileBounds;
                 Rectangle tileBounds = self.Level.Session.MapData.TileBounds;
@@ -63,7 +64,7 @@ namespace Celeste.Mod.FancyTileEntities {
                     }
 
                     Calc.PushRandom(randomSeed);
-                    Autotiler.Generated gen = Extensions.GenerateOverlay(GFX.FGAutotiler, map, bounds.X - tileBounds.Left, bounds.Y - tileBounds.Top, self.Level.SolidsData, behaviour);
+                    Autotiler.Generated gen = Extensions.GenerateOverlay(GFX.FGAutotiler, map, bounds.X - tileBounds.Left, bounds.Y - tileBounds.Top, self.Level.SolidsData, behaviour, positionBased);
                     Calc.PopRandom();
 
                     int left = bounds.Left;
@@ -86,7 +87,8 @@ namespace Celeste.Mod.FancyTileEntities {
                     }
 
                     Calc.PushRandom(randomSeed);
-                    Autotiler.Generated gen = Extensions.GenerateOverlay(GFX.BGAutotiler, map, bounds.X - tileBounds.Left, bounds.Y - tileBounds.Top, self.Level.BgData, behaviour);
+                    Extensions.RNGSeed = randomSeed;
+                    Autotiler.Generated gen = Extensions.GenerateOverlay(GFX.BGAutotiler, map, bounds.X - tileBounds.Left, bounds.Y - tileBounds.Top, self.Level.BgData, behaviour, positionBased);
                     Calc.PopRandom();
 
                     int left = bounds.Left;
