@@ -21,9 +21,9 @@ namespace Celeste.Mod.FancyTileEntities {
             long a = x + 1;
             long b = y + 1;
 
-            a = (a * 171) % 30269;
-            b = (b * 172) % 30307;
-            long c = (seed * 170) % 30323;
+            a = (a * 40000) % 30269;
+            b = (b * 40001) % 30307;
+            long c = (seed * 40002) % 30323;
 
             return (a / 30269.0 + b / 30307.0 + c / 30323.0) % 1;
         }
