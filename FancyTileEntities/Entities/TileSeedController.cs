@@ -47,6 +47,7 @@ namespace Celeste.Mod.FancyTileEntities {
                 EntityData data = controller.entity;
                 LevelData level = controller.level;
 
+                // Currently unused
                 int randomSeed = data.Int("randomSeed", 42);
 
                 Rectangle bounds = level.TileBounds;
@@ -62,7 +63,7 @@ namespace Celeste.Mod.FancyTileEntities {
                         }
                     }
 
-                    Calc.PushRandom(new PositionRandom(randomSeed));
+                    Calc.PushRandom(new PositionRandom(PositionRandom.Modes.Cogwheel, randomSeed));
                     Autotiler.Generated gen = Extensions.GenerateOverlay(GFX.FGAutotiler, map, bounds.X - tileBounds.Left, bounds.Y - tileBounds.Top, self.Level.SolidsData, behaviour);
                     Calc.PopRandom();
 
@@ -85,7 +86,7 @@ namespace Celeste.Mod.FancyTileEntities {
                         }
                     }
 
-                    Calc.PushRandom(new PositionRandom(randomSeed));
+                    Calc.PushRandom(new PositionRandom(PositionRandom.Modes.Cogwheel, randomSeed));
                     Autotiler.Generated gen = Extensions.GenerateOverlay(GFX.BGAutotiler, map, bounds.X - tileBounds.Left, bounds.Y - tileBounds.Top, self.Level.BgData, behaviour);
                     Calc.PopRandom();
 

@@ -210,7 +210,7 @@ namespace Celeste.Mod.FancyTileEntities {
                             while (l < num2) {
                                 object tiles = m_TileHandler.Invoke(tiler, new object[] { mapData, k, l, empty, forceData[k - startX, l - startY], behaviour });
                                 if (tiles != null) {
-                                    (Calc.Random as PositionRandom)?.SetPosition(k - startX, l - startY);
+                                    (Calc.Random as PositionRandom)?.SetPosition(k - startX, l - startY); // Positional Randomization for TileSeedController
                                     tileGrid.Tiles[k - startX, l - startY] = Calc.Random.Choose(f_Tiles_Textures.GetValue(tiles));
                                     if (f_Tiles_HasOverlays.GetValue(tiles)) {
                                         animatedTiles.Set(k - startX, l - startY, Calc.Random.Choose(f_Tiles_OverlapSprites.GetValue(tiles)), 1f, 1f);
