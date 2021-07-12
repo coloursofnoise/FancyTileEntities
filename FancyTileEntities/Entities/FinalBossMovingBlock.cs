@@ -3,9 +3,7 @@ using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using static Celeste.Mod.FancyTileEntities.Extensions;
 
 namespace Celeste.Mod.FancyTileEntities {
@@ -13,7 +11,6 @@ namespace Celeste.Mod.FancyTileEntities {
     [CustomEntity("FancyTileEntities/FancyFinalBossMovingBlock")]
     [TrackedAs(typeof(FinalBossMovingBlock))]
     public class FancyFinalBossMovingBlock : FinalBossMovingBlock {
-        private static readonly FieldInfo<HashSet<Actor>> f_Solid_riders;
 
         private DynData<FinalBossMovingBlock> baseData;
         private VirtualMap<char> tileMap;
@@ -24,10 +21,6 @@ namespace Celeste.Mod.FancyTileEntities {
         private ColliderList highlightCollider;
 
         private bool wasHighlighted;
-
-        static FancyFinalBossMovingBlock() {
-            f_Solid_riders = typeof(Solid).GetField<HashSet<Actor>>("riders", BindingFlags.NonPublic | BindingFlags.Static);
-        }
 
         public FancyFinalBossMovingBlock(EntityData data, Vector2 offset)
             : base(data.NodesWithPosition(offset), data.Width, data.Height, data.Int("nodeIndex", 0)) {
@@ -225,80 +218,8 @@ namespace Celeste.Mod.FancyTileEntities {
                 orig(self);
         }
 
-        #region SmoothMovement
+        public override void MoveHExact(int move) => this.MoveHExactSmooth(move);
+        public override void MoveVExact(int move) => this.MoveVExactSmooth(move);
 
-        public override void MoveHExact(int move) {
-            GetRiders();
-            float right = Right;
-            float left = Left;
-            Player entity = Scene.Tracker.GetEntity<Player>();
-            if (entity != null && Input.MoveX.Value == Math.Sign(move) && Math.Sign(entity.Speed.X) == Math.Sign(move) && !f_Solid_riders.GetValue(null).Contains(entity) && CollideCheck(entity, Position + Vector2.UnitX * move - Vector2.UnitY)) {
-                entity.MoveV(1f, null, null);
-            }
-            X += move;
-            MoveStaticMovers(Vector2.UnitX * move);
-            if (Collidable) {
-                foreach (Entity entity2 in Scene.Tracker.GetEntities<Actor>()) {
-                    Actor actor = (Actor) entity2;
-                    if (actor.AllowPushing) {
-                        bool collidable = actor.Collidable;
-                        actor.Collidable = true;
-                        if (!actor.TreatNaive && CollideCheck(actor, Position)) {
-                            Collidable = false;
-                            actor.MoveHExact(move, actor.SquishCallback, this);
-                            actor.LiftSpeed = LiftSpeed;
-                            Collidable = true;
-                        } else if (f_Solid_riders.GetValue(null).Contains(actor)) {
-                            Collidable = false;
-                            if (actor.TreatNaive) {
-                                actor.NaiveMove(Vector2.UnitX * move);
-                            } else {
-                                actor.MoveHExact(move, null, null);
-                            }
-                            actor.LiftSpeed = LiftSpeed;
-                            Collidable = true;
-                        }
-                        actor.Collidable = collidable;
-                    }
-                }
-            }
-            f_Solid_riders.GetValue(null).Clear();
-        }
-
-        public override void MoveVExact(int move) {
-            GetRiders();
-            float bottom = Bottom;
-            float top = Top;
-            Y += move;
-            MoveStaticMovers(Vector2.UnitY * move);
-            if (Collidable) {
-                foreach (Entity entity in Scene.Tracker.GetEntities<Actor>()) {
-                    Actor actor = (Actor) entity;
-                    if (actor.AllowPushing) {
-                        bool collidable = actor.Collidable;
-                        actor.Collidable = true;
-                        if (!actor.TreatNaive && CollideCheck(actor, Position)) {
-                            Collidable = false;
-                            actor.MoveVExact(move, actor.SquishCallback, this);
-                            actor.LiftSpeed = LiftSpeed;
-                            Collidable = true;
-                        } else if (f_Solid_riders.GetValue(null).Contains(actor)) {
-                            Collidable = false;
-                            if (actor.TreatNaive) {
-                                actor.NaiveMove(Vector2.UnitY * move);
-                            } else {
-                                actor.MoveVExact(move, null, null);
-                            }
-                            actor.LiftSpeed = LiftSpeed;
-                            Collidable = true;
-                        }
-                        actor.Collidable = collidable;
-                    }
-                }
-            }
-            f_Solid_riders.GetValue(null).Clear();
-        }
-
-        #endregion
     }
 }

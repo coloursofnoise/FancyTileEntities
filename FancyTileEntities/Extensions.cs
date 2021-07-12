@@ -156,6 +156,9 @@ namespace Celeste.Mod.FancyTileEntities {
         }
 
         public static VirtualMap<char> GenerateTileMap(string commaSeparatedString) {
+            if (string.IsNullOrWhiteSpace(commaSeparatedString))
+                throw new ArgumentException("Attempted to generate a TileMap with no tiles in it!");
+
             string[] tileStrings = commaSeparatedString.Split(',');
             tileStrings = Array.ConvertAll(tileStrings, s => s.Trim());
 

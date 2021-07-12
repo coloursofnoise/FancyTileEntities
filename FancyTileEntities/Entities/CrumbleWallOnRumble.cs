@@ -58,7 +58,7 @@ namespace Celeste.Mod.FancyTileEntities {
             if (self is FancyCrumbleWallOnRumble) {
                 if (self.Collidable && self.Scene != null) {
                     FancyCrumbleWallOnRumble block = (self as FancyCrumbleWallOnRumble);
-                    Audio.Play("event:/new_content/game/10_farewell/quake_rockbreak", block.Position);
+                    Audio.Play(SFX.game_10_quake_rockbreak, block.Position);
                     block.Collidable = false;
                     for (int x = 0; x < block.Width / 8f; x++) {
                         for (int y = 0; y < block.Height / 8f; y++) {
@@ -77,67 +77,9 @@ namespace Celeste.Mod.FancyTileEntities {
                 orig(self);
         }
 
-        #region SoundIndex
-
-        public override int GetLandSoundIndex(Entity entity) {
-            int idx = SurfaceSoundIndexAt(entity.BottomCenter + Vector2.UnitY * 4f);
-            if (idx == -1) {
-                idx = SurfaceSoundIndexAt(entity.BottomLeft + Vector2.UnitY * 4f);
-            }
-            if (idx == -1) {
-                idx = SurfaceSoundIndexAt(entity.BottomRight + Vector2.UnitY * 4f);
-            }
-            return idx;
-        }
-
-        public override int GetWallSoundIndex(Player player, int side) {
-            int idx = SurfaceSoundIndexAt(player.Center + Vector2.UnitX * side * 8f);
-            if (idx < 0) {
-                idx = SurfaceSoundIndexAt(player.Center + new Vector2(side * 8, -6f));
-            }
-            if (idx < 0) {
-                idx = SurfaceSoundIndexAt(player.Center + new Vector2(side * 8, 6f));
-            }
-            return idx;
-        }
-
-        public override int GetStepSoundIndex(Entity entity) {
-            int idx = SurfaceSoundIndexAt(entity.BottomCenter + Vector2.UnitY * 4f);
-            if (idx == -1) {
-                idx = SurfaceSoundIndexAt(entity.BottomLeft + Vector2.UnitY * 4f);
-            }
-            if (idx == -1) {
-                idx = SurfaceSoundIndexAt(entity.BottomRight + Vector2.UnitY * 4f);
-            }
-            return idx;
-        }
-
-        private int SurfaceSoundIndexAt(Vector2 readPosition) {
-            int x = (int) ((readPosition.X - X) / 8f);
-            int y = (int) ((readPosition.Y - Y) / 8f);
-            if (x >= 0 && y >= 0 && x < tileMap.Columns && y < tileMap.Rows) {
-                char c = tileMap[x, y];
-                if (c == 'k') {
-                    return CoreTileSurfaceIndex();
-                }
-                if (c != '0' && SurfaceIndex.TileToIndex.ContainsKey(c)) {
-                    return SurfaceIndex.TileToIndex[c];
-                }
-            }
-            return -1;
-        }
-        private int CoreTileSurfaceIndex() {
-            Level level = Scene as Level;
-            if (level.CoreMode == Session.CoreModes.Hot) {
-                return 37;
-            }
-            if (level.CoreMode == Session.CoreModes.Cold) {
-                return 36;
-            }
-            return 3;
-        }
-
-        #endregion
+        public override int GetLandSoundIndex(Entity entity) => this.GetLandSoundIndex(entity, tileMap);
+        public override int GetWallSoundIndex(Player player, int side) => this.GetWallSoundIndex(player, side, tileMap);
+        public override int GetStepSoundIndex(Entity entity) => this.GetStepSoundIndex(entity, tileMap);
 
     }
 }

@@ -6,7 +6,6 @@ using Monocle;
 using MonoMod.Cil;
 using MonoMod.Utils;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using static Celeste.Mod.FancyTileEntities.Extensions;
 
@@ -15,7 +14,6 @@ namespace Celeste.Mod.FancyTileEntities {
     [CustomEntity("FancyTileEntities/FancyFallingBlock")]
     [TrackedAs(typeof(FallingBlock))]
     public class FancyFallingBlock : FallingBlock {
-        private static readonly FieldInfo<HashSet<Actor>> f_Solid_solidRiders = typeof(Solid).GetField<HashSet<Actor>>("riders", BindingFlags.NonPublic | BindingFlags.Static);
         private static readonly FieldInfo f_Sequence_this = typeof(FallingBlock).GetNestedType("<Sequence>d__21", BindingFlags.NonPublic).GetField("<>4__this", BindingFlags.Public | BindingFlags.Instance);
 
         private bool manualTrigger;
@@ -28,7 +26,6 @@ namespace Celeste.Mod.FancyTileEntities {
 
         internal static void Sequence(ILContext il) {
             FieldReference fieldRef = il.Import(f_Sequence_this);
-            TypeDefinition typeRef = ModuleDefinition.ReadModule(typeof(FancyFallingBlock).Assembly.Location).GetType("Celeste.Mod.FancyTileEntities.FancyFallingBlock");
 
             ILCursor c = new ILCursor(il);
             c.GotoNext(MoveType.After, instr => instr.MatchCallOrCallvirt(typeof(Platform), "StopShaking"));
@@ -38,11 +35,11 @@ namespace Celeste.Mod.FancyTileEntities {
 
             c.Emit(OpCodes.Ldarg_0);
             c.Emit(OpCodes.Ldfld, fieldRef);
-            c.Emit(OpCodes.Isinst, typeRef);
+            c.Emit(OpCodes.Isinst, typeof(FancyFallingBlock));
             c.Emit(OpCodes.Brfalse_S, next);
             c.Emit(OpCodes.Ldarg_0);
             c.Emit(OpCodes.Ldfld, fieldRef);
-            c.Emit(OpCodes.Call, typeRef.FindMethod("System.Void FallParticles()"));
+            c.Emit(OpCodes.Call, typeof(FancyFallingBlock).GetMethod(nameof(FallParticles), BindingFlags.NonPublic | BindingFlags.Instance));
             c.Emit(OpCodes.Br, after);
         }
 
@@ -131,105 +128,11 @@ namespace Celeste.Mod.FancyTileEntities {
                 orig(self);
         }
 
-        #region SmoothVMovement
+        public override void MoveVExact(int move) => this.MoveVExactSmooth(move);
 
-        public override void MoveVExact(int move) {
-            GetRiders();
-            float bottom = Bottom;
-            float top = Top;
-            Y += move;
-            MoveStaticMovers(Vector2.UnitY * move);
-            if (Collidable) {
-                foreach (Entity entity in Scene.Tracker.GetEntities<Actor>()) {
-                    Actor actor = (Actor) entity;
-                    if (actor.AllowPushing) {
-                        bool collidable = actor.Collidable;
-                        actor.Collidable = true;
-                        if (!actor.TreatNaive && CollideCheck(actor, Position)) {
-                            Collidable = false;
-                            actor.MoveVExact(move, actor.SquishCallback, this);
-                            actor.LiftSpeed = LiftSpeed;
-                            Collidable = true;
-                        } else if (f_Solid_solidRiders.GetValue(null).Contains(actor)) {
-                            Collidable = false;
-                            if (actor.TreatNaive) {
-                                actor.NaiveMove(Vector2.UnitY * move);
-                            } else {
-                                actor.MoveVExact(move, null, null);
-                            }
-                            actor.LiftSpeed = LiftSpeed;
-                            Collidable = true;
-                        }
-                        actor.Collidable = collidable;
-                    }
-                }
-            }
-            f_Solid_solidRiders.GetValue(null).Clear();
-        }
-
-        #endregion
-
-        #region SoundIndex
-
-        public override int GetLandSoundIndex(Entity entity) {
-            int idx = SurfaceSoundIndexAt(entity.BottomCenter + Vector2.UnitY * 4f);
-            if (idx == -1) {
-                idx = SurfaceSoundIndexAt(entity.BottomLeft + Vector2.UnitY * 4f);
-            }
-            if (idx == -1) {
-                idx = SurfaceSoundIndexAt(entity.BottomRight + Vector2.UnitY * 4f);
-            }
-            return idx;
-        }
-
-        public override int GetWallSoundIndex(Player player, int side) {
-            int idx = SurfaceSoundIndexAt(player.Center + Vector2.UnitX * side * 8f);
-            if (idx < 0) {
-                idx = SurfaceSoundIndexAt(player.Center + new Vector2(side * 8, -6f));
-            }
-            if (idx < 0) {
-                idx = SurfaceSoundIndexAt(player.Center + new Vector2(side * 8, 6f));
-            }
-            return idx;
-        }
-
-        public override int GetStepSoundIndex(Entity entity) {
-            int idx = SurfaceSoundIndexAt(entity.BottomCenter + Vector2.UnitY * 4f);
-            if (idx == -1) {
-                idx = SurfaceSoundIndexAt(entity.BottomLeft + Vector2.UnitY * 4f);
-            }
-            if (idx == -1) {
-                idx = SurfaceSoundIndexAt(entity.BottomRight + Vector2.UnitY * 4f);
-            }
-            return idx;
-        }
-
-        private int SurfaceSoundIndexAt(Vector2 readPosition) {
-            int x = (int) ((readPosition.X - X) / 8f);
-            int y = (int) ((readPosition.Y - Y) / 8f);
-            if (x >= 0 && y >= 0 && x < tileMap.Columns && y < tileMap.Rows) {
-                char c = tileMap[x, y];
-                if (c == 'k') {
-                    return CoreTileSurfaceIndex();
-                }
-                if (c != '0' && SurfaceIndex.TileToIndex.ContainsKey(c)) {
-                    return SurfaceIndex.TileToIndex[c];
-                }
-            }
-            return -1;
-        }
-        private int CoreTileSurfaceIndex() {
-            Level level = SceneAs<Level>();
-            if (level.CoreMode == Session.CoreModes.Hot) {
-                return 37;
-            }
-            if (level.CoreMode == Session.CoreModes.Cold) {
-                return 36;
-            }
-            return 3;
-        }
-
-        #endregion
+        public override int GetLandSoundIndex(Entity entity) => this.GetLandSoundIndex(entity, tileMap);
+        public override int GetWallSoundIndex(Player player, int side) => this.GetWallSoundIndex(player, side, tileMap);
+        public override int GetStepSoundIndex(Entity entity) => this.GetStepSoundIndex(entity, tileMap);
 
     }
 }

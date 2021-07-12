@@ -7,7 +7,7 @@ using static Celeste.Mod.FancyTileEntities.Extensions;
 namespace Celeste.Mod.FancyTileEntities {
     [CustomEntity("FancyTileEntities/FancySolidTiles")]
     [TrackedAs(typeof(SolidTiles))]
-    class FancySolidTiles : SolidTiles {
+    public class FancySolidTiles : SolidTiles {
         private static readonly FieldInfo<VirtualMap<char>> f_SolidTiles_tileTypes;
 
         private bool blendEdges;
