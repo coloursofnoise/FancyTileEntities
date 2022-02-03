@@ -5,7 +5,9 @@ using Ahorn.AhornTileEntity
 
 @mapdef Entity "FancyTileEntities/FancyFloatySpaceBlock" FancyFloatySpaceBlock(x::Int, y::Int,
 	width::Int=Maple.defaultBlockWidth, height::Int=Maple.defaultBlockHeight,
-	disableSpawnOffset::Bool=false, connectsTo::String="3", tileData::String="")
+	disableSpawnOffset::Bool=false, connectsTo::String="3", tileData::String="",
+	randomSeed::Int=0,
+)
 
 const placements = Ahorn.PlacementDict(
     "Floaty Space Block (FancyTileEntities)" => Ahorn.EntityPlacement(

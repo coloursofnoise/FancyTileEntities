@@ -34,6 +34,7 @@ placements.entities.FancyTileEntities/FancyFinalBossMovingBlock.tooltips.tileDat
 # Floaty Space Block
 placements.entities.FancyTileEntities/FancyFloatySpaceBlock.tooltips.connectsTo=Blocks with the same connect index will connect to eachother.
 placements.entities.FancyTileEntities/FancyFloatySpaceBlock.tooltips.disableSpawnOffset=Whether or not the entity should spawn without the random offset.
+placements.entities.FancyTileEntities/FancyFloatySpaceBlock.tooltips.randomSeed=The seed used to select the random textures. 0 will use a random seed.\nOnly compatible with non-grouped blocks.
 
 # Better Intro Crusher
 placements.entities.FancyTileEntities/BetterIntroCrusher.tooltips.flags=If any of the flags are set, the entity will rest at its end node instead.
@@ -45,4 +46,4 @@ placements.entities.FancyTileEntities/FancyIntroCrusher.tooltips.manualTrigger=F
 
 # Solid Tiles
 placements.entities.FancyTileEntities/FancySolidTiles.tooltips.blendEdges=Blends the block in with the walls it touches.
-placements.entities.FancyTileEntities/FancySolidTiles.tooltips.randomSeed=The seed used to select the random textures.
+placements.entities.FancyTileEntities/FancySolidTiles.tooltips.randomSeed=The seed used to select the random textures. 0 will use a random seed.

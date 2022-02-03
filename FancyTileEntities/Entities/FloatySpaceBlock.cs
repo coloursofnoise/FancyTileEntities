@@ -16,11 +16,16 @@ namespace Celeste.Mod.FancyTileEntities {
         private VirtualMap<char> tileMap;
         private LightOcclude badLightOcclude;
 
+        private int seed;
+
         public FancyFloatySpaceBlock(EntityData data, Vector2 offset)
             : base(data.Position + offset, data.Width, data.Height, data.Char("connectsTo", '3'), data.Bool("disableSpawnOffset", false)) {
+            seed = data.Int("randomSeed");
             badLightOcclude = Get<LightOcclude>();
-
+            Calc.PushRandom(seed != 0 ? seed : Calc.Random.Next());
             tileMap = GenerateTileMap(data.Attr("tileData", ""));
+            Calc.PopRandom();
+
             ColliderList colliders = GenerateBetterColliderGrid(tileMap, 8, 8);
             Collider = colliders;
             AddLightOcclude(this, colliders);
@@ -41,8 +46,20 @@ namespace Celeste.Mod.FancyTileEntities {
                         fancyBlock.tileMap.CopyInto(map, offset);
                     }
                 }
+
+                if (block is FancyFloatySpaceBlock fancy && fancy.seed != 0 && block.Group.Count == 1) {
+                    Calc.PushRandom(fancy.seed);
+                }
             });
             cursor.Emit(OpCodes.Ldarg_0);
+
+            cursor.GotoNext(MoveType.After, instr => instr.MatchCallvirt<Autotiler>("GenerateMap"));
+            cursor.Emit(OpCodes.Ldarg_0);
+            cursor.EmitDelegate<Action<FloatySpaceBlock>>(block => {
+                if (block is FancyFloatySpaceBlock fancy && fancy.seed != 0 && block.Group.Count == 1) {
+                    Calc.PopRandom();
+                }
+            });
         }
 
         public override void Added(Scene scene) {
