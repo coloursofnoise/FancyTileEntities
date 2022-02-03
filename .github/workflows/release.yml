@@ -46,7 +46,7 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         name: main
-        path: src/bin/Debug/net452
+        path: FancyTileEntities/bin/Debug/net452
 
     - name: Create mod zip
       run: zip -qq -r FancyTileEntities.zip Ahorn FancyTileEntities/bin everest.yaml
@@ -71,6 +71,5 @@ jobs:
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           $RELEASE_URL \
           -d "$(jq -n \
-            --rawfile body changelog.current \
             --arg url $DOWNLOAD_URL \
-            '{body: "\($body)\r\n\r\n[Install FancyTileEntities.zip](https://0x0a.de/twoclick/?\($url))"}')"
+            '{body: "[Install FancyTileEntities.zip](https://0x0a.de/twoclick/?\($url))"}')"
