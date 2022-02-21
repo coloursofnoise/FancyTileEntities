@@ -14,6 +14,7 @@ namespace Celeste.Mod.FancyTileEntities {
         private int seed;
         private EntityID id;
         private bool loadGlobally;
+        private string bgTileString;
 
         static FancySolidTiles() {
             f_SolidTiles_tileTypes = typeof(SolidTiles).GetField<VirtualMap<char>>("tileTypes", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -24,6 +25,8 @@ namespace Celeste.Mod.FancyTileEntities {
             blendEdges = data.Bool("blendEdges");
 
             seed = data.Int("randomSeed");
+
+            bgTileString = data.Attr("tileDataBG");
 
             if (data.Bool("loadGlobally"))
                 loadGlobally = true;
@@ -47,10 +50,8 @@ namespace Celeste.Mod.FancyTileEntities {
         public override void Added(Scene scene) {
             base.Added(scene);
 
-            if (seed != 0)
-                Calc.PushRandom(seed);
-            else
-                Calc.PushRandom(Calc.Random.Next());
+            int tileSeed = seed != 0 ? seed : Calc.Random.Next();
+            Calc.PushRandom(tileSeed);
 
             Autotiler.Generated generated;
             if (blendEdges) {
@@ -60,8 +61,10 @@ namespace Celeste.Mod.FancyTileEntities {
                 int x = (int) X / 8 - tileBounds.Left;
                 int y = (int) Y / 8 - tileBounds.Top;
                 generated = GFX.FGAutotiler.GenerateOverlay(f_SolidTiles_tileTypes[this], x, y, solidsData, default);
+                scene.Add(new BGTileEntity(Position, bgTileString, level.BgData, new Point(x, y), tileSeed));
             } else {
                 generated = GFX.FGAutotiler.GenerateMap(f_SolidTiles_tileTypes[this], default(Autotiler.Behaviour));
+                scene.Add(new BGTileEntity(Position, bgTileString, tileSeed));
             }
             Calc.PopRandom();
 

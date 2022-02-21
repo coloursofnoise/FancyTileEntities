@@ -21,6 +21,7 @@ namespace Celeste.Mod.FancyTileEntities {
         private DynData<FallingBlock> baseData;
 
         private VirtualMap<char> tileMap;
+        private BGTileEntity bgTiles;
         private AnimatedTiles animatedTiles;
         private LightOcclude badLightOcclude;
 
@@ -64,6 +65,8 @@ namespace Celeste.Mod.FancyTileEntities {
             Add(animatedTiles = generated.SpriteOverlay);
             Calc.PopRandom();
 
+            bgTiles = new BGTileEntity(Position, data.Attr("tileDataBG", ""), newSeed);
+
             if (data.Bool("finalBoss", false)) {
                 VirtualMap<char> tileMapHighlighted = GenerateTileMap(data.Attr("tileDataHighlight", ""));
                 Calc.PushRandom(newSeed);
@@ -87,6 +90,12 @@ namespace Celeste.Mod.FancyTileEntities {
         public override void Added(Scene scene) {
             base.Added(scene);
             Remove(badLightOcclude);
+            scene.Add(bgTiles);
+        }
+
+        public override void Update() {
+            base.Update();
+            bgTiles.Position = Position;
         }
 
         public override void OnShake(Vector2 amount) {

@@ -13,6 +13,8 @@ namespace Celeste.Mod.FancyTileEntities {
 
         private VirtualMap<char> tileMap;
 
+        private BGTileEntity bgTileEntity;
+
         public FancyIntroCrusher(EntityData data, Vector2 offset)
             : base(data, offset) {
             Remove(baseData.Get<TileGrid>("tilegrid"));
@@ -22,6 +24,18 @@ namespace Celeste.Mod.FancyTileEntities {
 
             baseData["tilegrid"] = GFX.FGAutotiler.GenerateMap(tileMap, default(Autotiler.Behaviour)).TileGrid;
             Add(baseData.Get<TileGrid>("tilegrid"));
+
+            bgTileEntity = new BGTileEntity(Position, data.Attr("tileDataBG"));
+        }
+
+        public override void Added(Scene scene) {
+            base.Added(scene);
+            scene.Add(bgTileEntity);
+        }
+
+        public override void Update() {
+            base.Update();
+            bgTileEntity.Position = Position;
         }
 
         public override void MoveHExact(int move) => this.MoveHExactSmooth(move);
