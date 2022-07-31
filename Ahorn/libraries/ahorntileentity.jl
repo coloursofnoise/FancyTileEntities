@@ -11,41 +11,34 @@ struct TileData
 end
 
 function renderTileEntity(ctx, entity, tileData, room, xOffset=0, yOffset=0)
-		width = Int(get(entity.data, "width", 32))
-		height = Int(get(entity.data, "height", 32))
+	width = Int(get(entity.data, "width", 32))
+	height = Int(get(entity.data, "height", 32))
 
-		if tileData == ""
-			x = Int(get(entity.data, "x", 0)) + xOffset
-			y = Int(get(entity.data, "y", 0)) + yOffset
-			Ahorn.drawRectangle(ctx, x, y, width, height, (0.6, 0.2, 0.6, 0.8), (0.6, 0.2, 0.6, 0.6))
-		else
-			tiles = split(tileData, ",")
-
-			columns = 0
-			rows = 0
-			for i in eachindex(tiles)
-				tiles[i] = strip(tiles[i])
-				rows = rows + 1
-				columns = max(columns, length(tiles[i]))
-			end
-
-
-			tileMap = fill('0', (rows+2, columns+2))
-
-			for y in eachindex(tiles)
-				for x in eachindex(tiles[y])
-					if tiles[y][x] in Ahorn.validTileEntityTiles()
-						tileMap[y+1,x+1] = tiles[y][x]
-				end
-			end
-
-			x = Int(get(entity.data, "x", 0)) + xOffset
-			y = Int(get(entity.data, "y", 0)) + yOffset
-
-			objTiles = Ahorn.getObjectTiles(room, x, y, width, height)
-
-			Ahorn.drawFakeTiles(ctx, room, tileMap, objTiles, true, x, y, alpha=0.7, clipEdges=true)
+	if tileData == ""
+		x = Int(get(entity.data, "x", 0)) + xOffset
+		y = Int(get(entity.data, "y", 0)) + yOffset
+		Ahorn.drawRectangle(ctx, x, y, width, height, (0.6, 0.2, 0.6, 0.8), (0.6, 0.2, 0.6, 0.6))
+	else
+		tileRows = strip.(split(tileData, ","; keepempty=false))
+		tiles = [only.(split(row, "")) for row in tileRows]
+		
+		rows = length(tiles)
+		columns = maximum(length.(tiles))
+		
+		tileMap = fill('0', (rows+2, columns+2))
+		
+		for y in eachindex(tiles), x in eachindex(tiles[y])
+		  if tiles[y][x] in Ahorn.validTileEntityTiles()
+			tileMap[y+1,x+1] = tiles[y][x]
+		  end
 		end
+
+		x = Int(get(entity.data, "x", 0)) + xOffset
+		y = Int(get(entity.data, "y", 0)) + yOffset
+
+		objTiles = Ahorn.getObjectTiles(room, x, y, width, height)
+
+		Ahorn.drawFakeTiles(ctx, room, tileMap, objTiles, true, x, y, alpha=0.7, clipEdges=true)
 	end
 end
 renderTileEntity(ctx, entity, room, xOffset=0, yOffset=0) = renderTileEntity(ctx, entity, String(get(entity.data, "tileData", "")), room, xOffset, yOffset)
@@ -332,10 +325,11 @@ function stringToTileMap(tileString, width, height)
 	nOfTiles = (ceil(Int, height/8), ceil(Int, width/8))
 	tileMap = fill('0', nOfTiles)
 	if tileString != ""
-		strArray = strip.(split(tileString, ","))
-		for y in 1:min(size(strArray, 1), size(tileMap, 1)), x in 1:min(length(strArray[y]), size(tileMap, 2))
-			if strArray[y][x] in Ahorn.validTileEntityTiles()
-				tileMap[y, x] = strArray[y][x]
+		tileRows = strip.(split(tileString, ","; keepempty=false))
+		tiles = [only.(split(row, "")) for row in tileRows]
+		for (y, _) in zip(eachindex(tiles), 1:size(tileMap, 1)), (x, _) in zip(eachindex(tiles[y]), 1:size(tileMap, 2))
+			if tiles[y][x] in Ahorn.validTileEntityTiles()
+				tileMap[y, x] = tiles[y][x]
 			end
 		end
 	end
