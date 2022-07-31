@@ -155,11 +155,14 @@ namespace Celeste.Mod.FancyTileEntities {
                 entity.Add(new LightOcclude(new Rectangle((int) hitbox.Position.X, (int) hitbox.Position.Y, (int) hitbox.Width, (int) hitbox.Height), alpha));
         }
 
-        public static VirtualMap<char> GenerateTileMap(string commaSeparatedString) {
-            if (string.IsNullOrWhiteSpace(commaSeparatedString))
+        public static VirtualMap<char> GenerateTileMap(string tileMap) {
+            if (string.IsNullOrWhiteSpace(tileMap))
                 throw new ArgumentException("Attempted to generate a TileMap with no tiles in it!");
 
-            string[] tileStrings = commaSeparatedString.Split(',');
+            // Backwards compatibility, tileMap strings previously used `,` as the row separator
+            char delim = tileMap.Contains(',') ? ',' : '\n';
+
+            string[] tileStrings = tileMap.Split(delim);
             tileStrings = Array.ConvertAll(tileStrings, s => s.Trim());
 
             int columns = tileStrings.Max(s => s.Length);

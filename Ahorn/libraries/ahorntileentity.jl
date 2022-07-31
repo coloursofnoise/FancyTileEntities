@@ -19,7 +19,8 @@ function renderTileEntity(ctx, entity, tileData, room, xOffset=0, yOffset=0)
 		y = Int(get(entity.data, "y", 0)) + yOffset
 		Ahorn.drawRectangle(ctx, x, y, width, height, (0.6, 0.2, 0.6, 0.8), (0.6, 0.2, 0.6, 0.6))
 	else
-		tileRows = strip.(split(tileData, ","; keepempty=false))
+		delim = occursin(',', tileData) ? ',' : '\n'
+		tileRows = strip.(split(tileData, delim; keepempty=false))
 		tiles = [only.(split(row, "")) for row in tileRows]
 		
 		rows = length(tiles)
@@ -325,7 +326,8 @@ function stringToTileMap(tileString, width, height)
 	nOfTiles = (ceil(Int, height/8), ceil(Int, width/8))
 	tileMap = fill('0', nOfTiles)
 	if tileString != ""
-		tileRows = strip.(split(tileString, ","; keepempty=false))
+		delim = occursin(',', tileString) ? ',' : '\n'
+		tileRows = strip.(split(tileString, delim; keepempty=false))
 		tiles = [only.(split(row, "")) for row in tileRows]
 		for (y, _) in zip(eachindex(tiles), 1:size(tileMap, 1)), (x, _) in zip(eachindex(tiles[y]), 1:size(tileMap, 2))
 			if tiles[y][x] in Ahorn.validTileEntityTiles()
@@ -342,7 +344,7 @@ function tileMapToString(tileMap)
 		for x in axes(tileMap, 2)
 			tileString = string(tileString, tileMap[y, x])
 		end
-		tileString = string(tileString, ',')
+		tileString = string(tileString, '\n')
 	end
 	return tileString
 end
