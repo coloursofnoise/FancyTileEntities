@@ -49,7 +49,7 @@ jobs:
         path: FancyTileEntities/bin/Debug/net452
 
     - name: Create mod zip
-      run: zip -qq -r FancyTileEntities.zip Ahorn FancyTileEntities/bin everest.yaml
+      run: zip -qq -r FancyTileEntities.zip Ahorn Loenn FancyTileEntities/bin everest.yaml
 
     - name: Create Release
       id: release
