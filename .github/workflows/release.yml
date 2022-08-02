@@ -38,7 +38,7 @@ jobs:
         yq e -i '.[0].Version = strenv(MOD_VERSION)' everest.yaml
 
     - name: Build with .NET Core
-      n: dotnet build "/p:Configuration=Debug"
+      run: dotnet build "/p:Configuration=Debug"
       env:
         CELESTEGAMEPATH: ${{ github.workspace }}/lib-stripped
 
