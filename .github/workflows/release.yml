@@ -31,14 +31,14 @@ jobs:
 
     - name: Run Pre-Build Script
       run: |
-        VERSION=${TAG_NAME:1}
-        [[ "$VERSION" =~ -.*$ ]] && PRERELEASE=true || PRERELEASE=false
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        export MOD_VERSION=${TAG_NAME#v}
+        [[ "$MOD_VERSION" =~ -.*$ ]] && PRERELEASE=true || PRERELEASE=false
+        echo "MOD_VERSION=$MOD_VERSION" >> $GITHUB_ENV
         echo "PRERELEASE=$PRERELEASE" >> $GITHUB_ENV
-        yq e -i '.[0].Version = strenv(VERSION)' everest.yaml
+        yq e -i '.[0].Version = strenv(MOD_VERSION)' everest.yaml
 
     - name: Build with .NET Core
-      run: dotnet build "/p:Configuration=Debug"
+      n: dotnet build "/p:Configuration=Debug"
       env:
         CELESTEGAMEPATH: ${{ github.workspace }}/lib-stripped
 
@@ -55,7 +55,7 @@ jobs:
       id: release
       uses: softprops/action-gh-release@58fa4b7a8863f6beaf115a49196308842b8b0f06
       with:
-        name: FancyTileEntities ${{ env.VERSION }}
+        name: FancyTileEntities ${{ env.MOD_VERSION }}
         files: FancyTileEntities.zip
         fail_on_unmatched_files: true
         prerelease: ${{ env.PRERELEASE }}
