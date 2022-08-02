@@ -14,7 +14,7 @@ namespace Celeste.Mod.FancyTileEntities {
         private VirtualMap<char> tileMap;
 
         public FancyIntroCrusher(EntityData data, Vector2 offset)
-            : base(data, offset) {
+            : base(data.Modify(data => data.Values["tiletype"] = "3"), offset) {
             Remove(baseData.Get<TileGrid>("tilegrid"));
 
             tileMap = GenerateTileMap(data.Attr("tileData", ""));

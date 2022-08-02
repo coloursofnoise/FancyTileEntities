@@ -254,5 +254,10 @@ namespace Celeste.Mod.FancyTileEntities {
             return id == '0' || id == '\0';
         }
 
+        public static EntityData Modify(this EntityData data, Action<EntityData> processor) {
+            processor(data);
+            return data;
+        }
+
     }
 }
