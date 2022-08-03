@@ -30,6 +30,8 @@ namespace Celeste.Mod.FancyTileEntities {
             On.Celeste.FinalBossMovingBlock.Finish += FancyFinalBossMovingBlock.Finish; 
             IL.Celeste.FloatySpaceBlock.Awake += FancyFloatySpaceBlock.Awake;
             On.Celeste.RidgeGate.EnterSequence += FancyRidgeGate.EnterSequence;
+
+            ModInterop.GravityHelper.Load();
         }
 
         public override void Unload() {

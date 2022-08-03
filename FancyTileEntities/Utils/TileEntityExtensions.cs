@@ -53,6 +53,7 @@ namespace Celeste.Mod.FancyTileEntities {
         }
 
         public static void MoveVExactSmooth(this Solid solid, int move) {
+            ModInterop.GravityHelper.BeginOverride?.Invoke();
             solid.GetRiders();
             float bottom = solid.Bottom;
             float top = solid.Top;
@@ -87,6 +88,7 @@ namespace Celeste.Mod.FancyTileEntities {
             }
 
             riders.Clear();
+            ModInterop.GravityHelper.EndOverride?.Invoke();
         }
 
         #endregion
@@ -94,12 +96,14 @@ namespace Celeste.Mod.FancyTileEntities {
         #region SoundIndex
 
         public static int GetLandSoundIndex(this Solid solid, Entity entity, VirtualMap<char> tileMap) {
-            int idx = solid.SurfaceSoundIndexAt(entity.BottomCenter + Vector2.UnitY * 4f, tileMap);
+            float y = ModInterop.GravityHelper.IsActorInverted?.Invoke() == true ? entity.Top : entity.Bottom;
+
+            int idx = solid.SurfaceSoundIndexAt(new Vector2(entity.CenterX, y) + Vector2.UnitY * 4f, tileMap);
             if (idx == -1) {
-                idx = solid.SurfaceSoundIndexAt(entity.BottomLeft + Vector2.UnitY * 4f, tileMap);
+                idx = solid.SurfaceSoundIndexAt(new Vector2(entity.Left, y) + Vector2.UnitY * 4f, tileMap);
             }
             if (idx == -1) {
-                idx = solid.SurfaceSoundIndexAt(entity.BottomRight + Vector2.UnitY * 4f, tileMap);
+                idx = solid.SurfaceSoundIndexAt(new Vector2(entity.Right, y) + Vector2.UnitY * 4f, tileMap);
             }
             return idx;
         }
@@ -116,12 +120,14 @@ namespace Celeste.Mod.FancyTileEntities {
         }
 
         public static int GetStepSoundIndex(this Solid solid, Entity entity, VirtualMap<char> tileMap) {
-            int idx = solid.SurfaceSoundIndexAt(entity.BottomCenter + Vector2.UnitY * 4f, tileMap);
+            float y = ModInterop.GravityHelper.IsActorInverted?.Invoke() == true ? entity.Top : entity.Bottom;
+
+            int idx = solid.SurfaceSoundIndexAt(new Vector2(entity.CenterX, y) + Vector2.UnitY * 4f, tileMap);
             if (idx == -1) {
-                idx = solid.SurfaceSoundIndexAt(entity.BottomLeft + Vector2.UnitY * 4f, tileMap);
+                idx = solid.SurfaceSoundIndexAt(new Vector2(entity.Left, y) + Vector2.UnitY * 4f, tileMap);
             }
             if (idx == -1) {
-                idx = solid.SurfaceSoundIndexAt(entity.BottomRight + Vector2.UnitY * 4f, tileMap);
+                idx = solid.SurfaceSoundIndexAt(new Vector2(entity.Right, y) + Vector2.UnitY * 4f, tileMap);
             }
             return idx;
         }
