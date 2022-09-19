@@ -10,7 +10,7 @@ floatySpaceBlock.placements = {
         connectsTo = "3",
         tileData = "",
         disableSpawnOffset = false,
-        randomSeed = 0
+        randomSeed = 0,
         width = 8,
         height = 8
     }

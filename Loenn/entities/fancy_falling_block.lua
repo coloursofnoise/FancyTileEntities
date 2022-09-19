@@ -20,7 +20,7 @@ fallingBlock.placements = {
             tileData = "",
             tileDataHighlight = "",
             behind = false,
-            finalBoss = true
+            finalBoss = true,
             width = 8,
             height = 8
         }
@@ -28,7 +28,7 @@ fallingBlock.placements = {
 }
 
 fallingBlock.ignoredFields = {
-    finalBoss
+    "finalBoss"
 }
 
 function fallingBlock.depth(room, entity)
