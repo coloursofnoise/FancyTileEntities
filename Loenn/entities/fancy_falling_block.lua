@@ -8,7 +8,7 @@ fallingBlock.placements = {
     {
         name = "falling_block",
         data = {
-            tileData = "",
+            tileData = "0",
             climbFall = true,
             behind = false,
             manualTrigger = false,
@@ -20,8 +20,8 @@ fallingBlock.placements = {
     {
         name = "boss_falling_block",
         data = {
-            tileData = "",
-            tileDataHighlight = "",
+            tileData = "0",
+            tileDataHighlight = "0",
             behind = false,
             finalBoss = true,
             width = 8,

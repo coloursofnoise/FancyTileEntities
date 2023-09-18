@@ -143,7 +143,7 @@ function buttonField.getElement(name, value, options)
                 height = 32,
                 callback = function(data)
                     local value = TileEditor.getFieldFromMatrix(data)
-                    formField:setValue(value)
+                    formField:setValue(value or "")
                 end
             }
             

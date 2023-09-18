@@ -8,7 +8,7 @@ fakeWall.depth = -13000
 fakeWall.placements = {
     name = "fake_wall",
     data = {
-        tileData = "",
+        tileData = "0",
         width = 8,
         height = 8
     }

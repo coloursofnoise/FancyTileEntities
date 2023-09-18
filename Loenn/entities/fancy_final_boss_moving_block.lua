@@ -19,8 +19,8 @@ movingBlock.placements = {
         nodeIndex = 0,
         width = 8,
         height = 8,
-        tileData = "",
-        tileDataHighlight = ""
+        tileData = "0",
+        tileDataHighlight = "0"
     }
 }
 
