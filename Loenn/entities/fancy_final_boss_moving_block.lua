@@ -1,6 +1,8 @@
 local utils = require("utils")
 
 local movingBlock = {}
+local mods = require("mods")
+local fancyTileEntitieshelper = mods.requireFromPlugin("libraries.fancy_tile_entities_helper")
 
 movingBlock.name = "FancyTileEntities/FancyFinalBossMovingBlock"
 movingBlock.depth = 0
@@ -17,13 +19,21 @@ movingBlock.placements = {
         nodeIndex = 0,
         width = 8,
         height = 8,
-        tileData = "",
-        tileDataHighlight = ""
+        tileData = "0",
+        tileDataHighlight = "0"
     }
 }
 
-function movingBlock.nodeRectangle(room, entity, node)
-    return utils.rectangle(node.x or 0, node.y or 0, entity.width or 8, entity.height or 8)
-end
+movingBlock.fieldInformation = {
+    tileData = {
+        fieldType = "FancyTileEntities.buttonStringField"
+    },
+    tileDataHighlight = {
+        fieldType = "FancyTileEntities.buttonStringField"
+    }
+}
+
+movingBlock.sprite = fancyTileEntitieshelper.getEntitySpriteFunction("blendEdges", "tilesFg", {1, 1, 1, 1})
+
 
 return movingBlock

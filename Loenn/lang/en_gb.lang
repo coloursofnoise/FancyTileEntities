@@ -5,18 +5,18 @@ mods.FancyTileEntities.name=Fancy Tile Entities
 entities.FancyTileEntities/FancyConditionBlock.placements.name.condition_block=Fancy Condition Block
 entities.FancyTileEntities/FancyConditionBlock.attributes.description.conditionID=Links the condition block to the ID of a key, strawberry, or button.\nFormat: (room:id)\nExample: "a-01:4"
 entities.FancyTileEntities/FancyConditionBlock.attributes.description.condition=Ties the activation to the collection or activation of a key, strawberry, or button.
-entities.FancyTileEntities/FancyConditionBlock.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.
+entities.FancyTileEntities/FancyConditionBlock.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.\nYou may also paste a selection of foreground tiles into this field.
 
 # Fancy Crumble Wall On Rumble
 entities.FancyTileEntities/FancyCrumbleWallOnRumble.placements.name.crumble_wall=Fancy Crumble Wall On Rumble
 entities.FancyTileEntities/FancyCrumbleWallOnRumble.attributes.description.blendin=Blends the block in with the walls it touches, making it less apparent.
-entities.FancyTileEntities/FancyCrumbleWallOnRumble.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.
+entities.FancyTileEntities/FancyCrumbleWallOnRumble.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.\nYou may also paste a selection of foreground tiles into this field.
 entities.FancyTileEntities/FancyCrumbleWallOnRumble.attributes.description.persistent=Once broken, the block will remain that way, even if the player dies.
 
 # Fancy Dash Block
 entities.FancyTileEntities/FancyDashBlock.placements.name.dash_block=Fancy Dash Block
 entities.FancyTileEntities/FancyDashBlock.attributes.description.blendin=Blends the block in with the walls it touches, making it less apparent.
-entities.FancyTileEntities/FancyDashBlock.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.
+entities.FancyTileEntities/FancyDashBlock.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.\nYou may also paste a selection of foreground tiles into this field.
 entities.FancyTileEntities/FancyDashBlock.attributes.description.persistent=Once broken, the block will remain that way, even if the player dies.
 
 # Fancy Exit Block
@@ -33,19 +33,19 @@ entities.FancyTileEntities/FancyFakeWall.attributes.description.tileData=$tileDa
 entities.FancyTileEntities/FancyFallingBlock.placements.name.falling_block=Fancy Falling Block
 entities.FancyTileEntities/FancyFallingBlock.attributes.description.climbFall=After a delay, the block will physically fall down until it comes into contact with another block.
 entities.FancyTileEntities/FancyFallingBlock.attributes.description.behind=Whether the block should visually be further behind in the scene or not.
-entities.FancyTileEntities/FancyFallingBlock.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.
+entities.FancyTileEntities/FancyFallingBlock.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.\nYou may also paste a selection of foreground tiles into this field.
 entities.FancyTileEntities/FancyFallingBlock.attributes.description.tileDataHighlight=Tile Data used while the block is moving.
 entities.FancyTileEntities/FancyFallingBlock.attributes.description.manualTrigger=For use with an EntityTrigger.
 
 # Badeline Boss Moving Block
 entities.FancyTileEntities/FancyFinalBossMovingBlock.placements.name.moving_block=Fancy Final Boss Moving Block
 entities.FancyTileEntities/FancyFinalBossMovingBlock.attributes.description.nodeIndex=The node index of the Badeline boss this should fall down on.
-entities.FancyTileEntities/FancyFinalBossMovingBlock.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.
+entities.FancyTileEntities/FancyFinalBossMovingBlock.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.\nYou may also paste a selection of foreground tiles into this field.
 entities.FancyTileEntities/FancyFinalBossMovingBlock.attributes.description.tileDataHighlight=Tile Data used while the block is moving.
 
 # Floaty Space Block
 entities.FancyTileEntities/FancyFloatySpaceBlock.placements.name.floaty_space_block=Fancy Floaty Space Block
-entities.FancyTileEntities/FancyFloatySpaceBlock.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.
+entities.FancyTileEntities/FancyFloatySpaceBlock.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.\nYou may also paste a selection of foreground tiles into this field.
 entities.FancyTileEntities/FancyFloatySpaceBlock.attributes.description.connectsTo=Blocks with the same connect index will connect to eachother.
 entities.FancyTileEntities/FancyFloatySpaceBlock.attributes.description.disableSpawnOffset=Whether or not the entity should spawn without the random offset.
 entities.FancyTileEntities/FancyFloatySpaceBlock.attributes.description.randomSeed=The seed used to select the random textures. 0 will use a random seed.\nOnly compatible with non-grouped blocks.
@@ -60,13 +60,13 @@ entities.FancyTileEntities/BetterIntroCrusher.attributes.description.tiletype=De
 entities.FancyTileEntities/FancyIntroCrusher.placements.name.intro_crusher=Fancy Intro Crusher
 entities.FancyTileEntities/FancyIntroCrusher.attributes.description.flags=If any of the flags are set, the entity will rest at its end node instead.
 entities.FancyTileEntities/FancyIntroCrusher.attributes.description.manualTrigger=For use with an EntityTrigger.
-entities.FancyTileEntities/FancyIntroCrusher.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.
+entities.FancyTileEntities/FancyIntroCrusher.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.\nYou may also paste a selection of foreground tiles into this field.
 
 # Solid Tiles
 entities.FancyTileEntities/FancySolidTiles.placements.name.solid_tiles=Fancy Solid Tiles
 entities.FancyTileEntities/FancySolidTiles.attributes.description.blendEdges=Blends the block in with the walls it touches.
 entities.FancyTileEntities/FancySolidTiles.attributes.description.randomSeed=The seed used to select the random textures. 0 will use a random seed.
-entities.FancyTileEntities/FancySolidTiles.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.
+entities.FancyTileEntities/FancySolidTiles.attributes.description.tileData=A {width} by {height} grid of characters that correspond to tileset IDs.\nEach row should be separated by a newline character.\nYou may also paste a selection of foreground tiles into this field.
 
 # Ridge Gate
 entities.FancyTileEntities/FancyRidgeGate.placements.name.ridge_gate=Fancy Ridge Gate
