@@ -1,3 +1,6 @@
+local mods = require("mods")
+local fancyTileEntitieshelper = mods.requireFromPlugin("libraries.fancy_tile_entities_helper")
+
 local fallingBlock = {}
 
 fallingBlock.name = "FancyTileEntities/FancyFallingBlock"
@@ -26,6 +29,18 @@ fallingBlock.placements = {
         }
     }
 }
+
+
+fallingBlock.fieldInformation = {
+    tileData = {
+        fieldType = "FancyTileEntities.buttonStringField"
+    },
+    tileDataHighlight = {
+        fieldType = "FancyTileEntities.buttonStringField"
+    }
+}
+
+fallingBlock.sprite = fancyTileEntitieshelper.getEntitySpriteFunction("blendEdges", "tilesFg", {1, 1, 1, 1})
 
 fallingBlock.ignoredFields = {
     "finalBoss"

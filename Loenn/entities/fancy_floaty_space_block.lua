@@ -1,4 +1,6 @@
 local fakeTilesHelper = require("helpers.fake_tiles")
+local mods = require("mods")
+local fancyTileEntitieshelper = mods.requireFromPlugin("libraries.fancy_tile_entities_helper")
 
 local floatySpaceBlock = {}
 
@@ -15,6 +17,14 @@ floatySpaceBlock.placements = {
         height = 8
     }
 }
+
+floatySpaceBlock.fieldInformation = {
+    tileData = {
+        fieldType = "FancyTileEntities.buttonStringField"
+    }
+}
+
+floatySpaceBlock.sprite = fancyTileEntitieshelper.getEntitySpriteFunction("blendEdges", "tilesFg", {1, 1, 1, 1})
 
 floatySpaceBlock.fieldInformation = fakeTilesHelper.getFieldInformation("connectsTo")
 
